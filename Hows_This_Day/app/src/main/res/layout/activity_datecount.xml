@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DateCountActivity">
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="248dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="60dp"
+        android:text="하트를 눌러 아래 날짜들을 설정해 주세요"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="553dp"
+        android:layout_marginTop="90dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_msg">
+
+        <TextView
+            android:id="@+id/tv_firstdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="   사귀기 시작한 날"
+            android:textSize="24sp" />
+
+
+        <ImageButton
+            android:id="@+id/bt_emptyheart"
+            android:layout_width="42dp"
+            android:layout_height="39dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/datecount_effect"
+            android:onClick="mOnClick"/>
+
+
+        <TextView
+            android:id="@+id/val_firstdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_yourbirthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_marginLeft="50dp"
+            android:paddingLeft="15dp"
+            android:text=" 당신의 생일"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/bt_emptyheart2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/datecount_effect"
+            android:onClick="mOnClick" />
+
+        <TextView
+            android:id="@+id/val_yourbitrhday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_loverbithday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="   연인의 생일"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/bt_emptyheart3"
+            android:layout_width="40dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/datecount_effect"
+            android:onClick="mOnClick" />
+
+        <TextView
+            android:id="@+id/val_loverbithday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/date_count_username"
+            android:layout_width="188dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="50dp"
+            android:text="TextView"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/bt_tohtd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="130dp"
+            android:text="이날어때 시작하기"
+            android:textColor="#FCFCFC" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

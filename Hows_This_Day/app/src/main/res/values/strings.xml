@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">이날어때</string>
+    <string name="title_activity_htd">HTDActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+
+</resources>
