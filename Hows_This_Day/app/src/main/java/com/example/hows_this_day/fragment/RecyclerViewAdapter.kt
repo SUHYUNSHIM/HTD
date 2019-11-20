@@ -27,7 +27,7 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
     var mYear : Int = 0
     //firebase database
 
-    val mDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("UserCalendardata")
+    val mDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
     val Reference = mDatabase.child(user!!.uid)
     init {
@@ -64,6 +64,7 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
 
                                        } else{
                                            holder.bt_emptydate.setSelected(true)
+                                           holder.bt_emptydate.setPressed(true)
                                        }
                                    }
                                }
