@@ -20,7 +20,7 @@ class BFragment : Fragment() {
         //뷰 설정
         tvFragmentMain
         //diary 기능 추가 예정
-
+5
     }
 
 
