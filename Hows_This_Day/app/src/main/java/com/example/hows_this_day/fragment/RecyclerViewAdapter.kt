@@ -24,7 +24,6 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
     var mDate : Int = 0
     var mMonth : Int = 0
     var mYear : Int = 0
-    var checkNum = 0
     //firebase database
 
     val mDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("UserCalendardata")
@@ -82,33 +81,23 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
         //}
 
         holder.bt_emptydate.setOnClickListener(){
-            mDate= baseCalendar.data[position]
-            mMonth = baseCalendar.calendar.get(Calendar.MONTH)+1
-            mYear = baseCalendar.calendar.get(Calendar.YEAR)
-            Log.d("HeartClick",mDate.toString())
-            Log.d("HeartClick2",mMonth.toString())
-            databaseUpdate(mYear,mMonth,mDate)
-            //  holder.bt_emptyheart_frg.setSelected(true)
-            //holder.bt_emptydate.setSelected(true)
-            if(checkNum==0){
-                holder.bt_emptydate.setActivated(false)
-                holder.bt_emptydate.setSelected(true)
-                checkNum = 1
-            }
-            else {
-                holder.bt_emptydate.setSelected(false)
-                checkNum = 0
-            }
-            //Log.d("pressed","ddddd")
+            if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
 
-        }
-        //하트를 길게 누를 시 완성된 하트가 되도록 구현 예정 (아직 안됌.)
-        holder.bt_emptydate.setOnLongClickListener(){
+            } else{
+                //달력정보 데이터베이스 업데이트
+                mDate = baseCalendar.data[position]
+                mMonth = baseCalendar.calendar.get(Calendar.MONTH) + 1
+                mYear = baseCalendar.calendar.get(Calendar.YEAR)
+                Log.d("HeartClick", mDate.toString())
+                Log.d("HeartClick2", mMonth.toString())
+                if(holder.bt_emptydate.isSelected == true){
 
-            holder.bt_emptydate.setActivated(true)
-            holder.bt_emptydate.setSelected(true)
-            true
+                } else {
+                    databaseUpdate(mYear, mMonth, mDate)
+                }
+            }
         }
+
 
         if (position % BaseCalendar.DAYS_OF_WEEK == 0) holder.tv_date.setTextColor(Color.parseColor("#ff1200"))
         else holder.tv_date.setTextColor(Color.parseColor("#676d6e"))
@@ -143,7 +132,7 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
         Day : Int
     ){
         val User = CalendarData(Year,Month,Day)
-        mDatabase.child(user!!.uid).child("CalendarData").push().setValue(User)
+        mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(User)
     }
 
 
