@@ -93,7 +93,7 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
                 Log.d("HeartClick", mDate.toString())
                 Log.d("HeartClick2", mMonth.toString())
                 if(holder.bt_emptydate.isSelected == true){
-
+                    databaseDelete(mYear,mMonth,mDate)
                 } else {
                     databaseUpdate(mYear, mMonth, mDate)
                 }
@@ -136,7 +136,13 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
         val User = CoupleData(false)
         mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(User)
     }
-
+    fun databaseDelete(
+        Year:Int,
+        Month:Int,
+        Day:Int
+    ){
+        mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(null)
+    }
 
 
 }
