@@ -11,7 +11,8 @@ import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.item_datecell.*
 import kotlinx.android.synthetic.main.item_datecell.view.*
 import java.util.*
-import com.example.hows_this_day.CalendarData
+
+import com.example.hows_this_day.CoupleData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -53,22 +54,22 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (calendarSnapshot in dataSnapshot.child("CalendarData").children) {
-                    val calendarData = calendarSnapshot.getValue(CalendarData::class.java)
-                    calendarData?.let {
-                        if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
+                for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
+                   if( yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)){
+                       for (monthSnapshot in yearSnapshot.children){
+                           if (monthSnapshot.key!!.toInt() -1 == baseCalendar.calendar.get(Calendar.MONTH)){
+                               for (daySnapshot in monthSnapshot.children){
+                                   if (daySnapshot.key!!.toInt() == baseCalendar.data[position]){
+                                       if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate){
 
-                        } else {
-                            if (calendarData.Day == baseCalendar.data[position]
-                                && calendarData.Month - 1 == baseCalendar.calendar.get(Calendar.MONTH)
-                                && calendarData.Year == baseCalendar.calendar.get(Calendar.YEAR)
-                            ) {
-                                holder.bt_emptydate.setSelected(true)
-                            }
-                        }
-
-
-                    }
+                                       } else{
+                                           holder.bt_emptydate.setSelected(true)
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
                 }
             }
         }
@@ -131,7 +132,7 @@ class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter
         Month : Int,
         Day : Int
     ){
-        val User = CalendarData(Year,Month,Day)
+        val User = CoupleData(false)
         mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(User)
     }
 
