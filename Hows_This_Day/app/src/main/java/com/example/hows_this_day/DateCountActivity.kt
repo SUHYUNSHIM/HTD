@@ -1,6 +1,8 @@
 package com.example.hows_this_day
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +19,8 @@ import java.util.*
 
 
 class DateCountActivity : AppCompatActivity() {
-
+    lateinit var name:String
+    private var coupleValue : Boolean? = null
     var mYear : Int = 0
     var mMonth: Int = 0
     var mDay  :Int = 0
@@ -70,6 +73,7 @@ class DateCountActivity : AppCompatActivity() {
                 UpdateNow3()
                 heartSelecte3()
             }
+            coupleValue = datasnapshot.child("CoupleValue").getValue(Boolean::class.java)
         }
     }
 
@@ -148,6 +152,7 @@ class DateCountActivity : AppCompatActivity() {
 
         if (intent.hasExtra("UserName")) {
             date_count_username.text = intent.getStringExtra("UserName")
+            name = intent.getStringExtra("UserName")
         } else {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
@@ -158,6 +163,39 @@ class DateCountActivity : AppCompatActivity() {
             val HTDintent = Intent(this, TestActivity::class.java)
             startActivity(HTDintent)
         })
+        val invite = findViewById<Button>(R.id.button_invite)
+        invite.setOnClickListener(){
+            if (coupleValue == null) {
+                sendMessage()
+                mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
+            }else {
+                var dialog = AlertDialog.Builder(this)
+                dialog.setTitle("초대하기")
+                    .setMessage("다시 초대하시겠습니까?")
+                dialog.setIcon(R.mipmap.ic_launcher)
+
+                fun toast_p() {
+                    sendMessage()
+                    mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
+                }
+                fun toast_n(){
+                    Toast.makeText(this@DateCountActivity, "그러시든가", Toast.LENGTH_SHORT).show()
+                }
+                var dialog_listener = object:DialogInterface.OnClickListener{
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        when(which){
+                            DialogInterface.BUTTON_POSITIVE ->
+                                toast_p()
+                            DialogInterface.BUTTON_NEGATIVE ->
+                                toast_n()
+                        }
+                    }
+                }
+                dialog.setPositiveButton("넹",dialog_listener)
+                dialog.setNegativeButton("아닌데요?",dialog_listener)
+                dialog.show()
+            }
+        }
 
 
 
@@ -232,6 +270,13 @@ class DateCountActivity : AppCompatActivity() {
                 }
                 //    bt_emptyheart3.setSelected(true)
             }
+            //초대보내기
+
+            //연동하기
+            R.id.button_combination -> {
+                val HTDintent = Intent(this, TestActivity::class.java)
+                startActivity(HTDintent)
+            }
         }
     }
 
@@ -303,5 +348,13 @@ class DateCountActivity : AppCompatActivity() {
     ) {
         val User = CalendarData(Year,Month+1,Day)
         mDatabase.child(user!!.uid).child(DayValue).setValue(User)
+    }
+    fun sendMessage(){
+        val email: Intent = Intent(android.content.Intent.ACTION_SEND)
+        email.setType("plain/text")
+        email.putExtra(Intent.EXTRA_EMAIL,"ddd333@naver.com")
+        email.putExtra(Intent.EXTRA_SUBJECT,"$name 님께서 당신을 여기어떄로 초대합니다.")
+        email.putExtra(Intent.EXTRA_TEXT,"넌 나에게 모욕감을 줬어\n$postReference 를 복사해 주세요")
+        startActivity(email)
     }
 }
