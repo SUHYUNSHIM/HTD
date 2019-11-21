@@ -160,7 +160,7 @@ class DateCountActivity : AppCompatActivity() {
         //다음화면인 HTDActivity로 넘어가기 위한 버튼, intent
         val b = findViewById<View>(R.id.bt_tohtd) as Button
         b.setOnClickListener(View.OnClickListener {
-            val HTDintent = Intent(this, TapActivity::class.java)
+            val HTDintent = Intent(this, TabActivity::class.java)
             startActivity(HTDintent)
         })
         val invite = findViewById<Button>(R.id.button_invite)
@@ -274,7 +274,7 @@ class DateCountActivity : AppCompatActivity() {
 
             //연동하기
             R.id.button_combination -> {
-                val HTDintent = Intent(this, TapActivity::class.java)
+                val HTDintent = Intent(this, TabActivity::class.java)
                 startActivity(HTDintent)
             }
         }
