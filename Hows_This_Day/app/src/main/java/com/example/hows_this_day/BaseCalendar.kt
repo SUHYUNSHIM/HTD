@@ -1,4 +1,4 @@
-package com.example.hows_this_day.fragment
+package com.example.hows_this_day
 
 import java.util.*
 

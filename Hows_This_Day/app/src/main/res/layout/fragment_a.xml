@@ -1,137 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#f7cac9"
-    android:gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F7CAC9">
 
         <TextView
-            android:id="@+id/tv_prev_month"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="  prev  "
-            android:textSize="15dp" />
+            android:text="Couple Profile"
+            android:layout_marginTop="80dp"
+            android:textSize="40sp"
+            android:gravity="center_horizontal" />
 
-        <TextView
-            android:id="@+id/tv_current_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:text="2019 - 03"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/tv_next_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  next  "
-            android:textSize="15dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="500dp"
-
-        android:layout_marginBottom="30dp"
-        android:background="#ffffff"
-        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:background="#8ca4cf"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="SUN"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/my_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:adjustViewBounds="true"
+                android:background="@color/colorAccent"
+                app:srcCompat="@drawable/my_profile"
+                android:maxWidth="200dp"
+                android:maxHeight="200dp"
+                android:onClick="onClick" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="MON"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/redheart" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="TUE"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/lover_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:adjustViewBounds="true"
+                android:background="@color/colorAccent"
+                app:srcCompat="@drawable/lover_profile"
+                android:maxWidth="200dp"
+                android:maxHeight="200dp"
+                android:onClick="onClick" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="WED"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="THU"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="FRI"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="SAT"
-                android:textColor="#ffff"
-                android:textSize="10dp"
-                android:textStyle="bold" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_schedule"
-            android:layout_width="350dp"
-            android:layout_height="400dp">
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_my_UploadPicture"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@color/colorAccent"
+                android:layout_margin="10dp"
+                android:onClick="onClick"
+                android:text="사진 선택"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btn_lover_UploadPicture"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@color/colorAccent"
+                android:layout_margin="80dp"
+                android:onClick="onClick"
+                android:text="사진 선택"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
