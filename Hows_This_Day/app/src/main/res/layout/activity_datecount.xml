@@ -11,13 +11,13 @@
         android:id="@+id/tv_msg"
         android:layout_width="248dp"
         android:layout_height="45dp"
-        android:layout_marginTop="60dp"
         android:text="하트를 눌러 아래 날짜들을 설정해 주세요"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/연동"
+        app:layout_constraintStart_toEndOf="@+id/button_invite"
+        app:layout_constraintTop_toBottomOf="@+id/연동" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="409dp"
         android:layout_height="553dp"
         android:layout_marginTop="90dp"
@@ -42,7 +42,7 @@
             android:layout_height="39dp"
             android:layout_marginLeft="30dp"
             android:background="@drawable/datecount_effect"
-            android:onClick="mOnClick"/>
+            android:onClick="mOnClick" />
 
 
         <TextView
@@ -121,5 +121,21 @@
             android:textColor="#FCFCFC" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_invite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="초대"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_combination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="초대되심?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
