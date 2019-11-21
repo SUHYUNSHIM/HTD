@@ -20,7 +20,7 @@ import com.google.firebase.database.*
 
 
 
-class RecyclerViewAdapter(val contextActivity: AFragment) : RecyclerView.Adapter<ViewHolderHelper>() {
+class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter<ViewHolderHelper>() {
 
     private val baseCalendar = BaseCalendar()
     var mDate : Int = 0
