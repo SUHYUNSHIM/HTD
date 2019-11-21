@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import kotlinx.android.synthetic.main.activity_tap.*
 
-class TapActivity : AppCompatActivity() {
+class TabActivity : AppCompatActivity() {
 
     private val adapter by lazy { MainAdapter(supportFragmentManager) }
 
@@ -14,7 +14,7 @@ class TapActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tap)
 
         // 뷰페이저 어댑터 연결
-        testView.adapter = TapActivity@adapter
+        testView.adapter = TabActivity@adapter
 
         testView.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {

@@ -21,7 +21,7 @@
         <activity android:name=".InviteActivity"></activity>
 
         <activity
-            android:name=".TapActivity"
+            android:name=".TabActivity"
             android:label="@string/title_activity_htd"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
