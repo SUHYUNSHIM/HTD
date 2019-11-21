@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hows_this_day.R
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.item_datecell.*
-import kotlinx.android.synthetic.main.item_datecell.view.*
 import java.util.*
 
 import com.example.hows_this_day.CoupleData
