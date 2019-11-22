@@ -370,7 +370,9 @@ class DateCountActivity : AppCompatActivity() {
                     Toast.makeText(this@DateCountActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
                     coupleName = editText.getText().toString()
                     if (coupleName == "") {
-                        mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+                        Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                        DialogCombine()
+                     //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
                     } else {
                         mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
                     }
@@ -385,7 +387,9 @@ class DateCountActivity : AppCompatActivity() {
             //입력
             coupleName = editText.getText().toString()
             if (coupleName == "") {
-                mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+                Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                DialogCombine()
+               // mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
             } else {
                 mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
             }
