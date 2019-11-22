@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -168,6 +169,32 @@ class DateCountActivity : AppCompatActivity() {
             if (coupleName == null) {
                 DialogCombine()
             } else {
+                var dialog = AlertDialog.Builder(this)
+                dialog.setTitle("변수입력")
+                    .setMessage("다시 입력하시겠습니까?")
+                dialog.setIcon(R.mipmap.ic_launcher)
+
+                fun toast_p() {
+                    DialogCombine()
+                }
+
+                fun toast_n() {
+                    Toast.makeText(this@DateCountActivity, "그러시든가", Toast.LENGTH_SHORT).show()
+                }
+
+                var dialog_listener = object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        when (which) {
+                            DialogInterface.BUTTON_POSITIVE ->
+                                toast_p()
+                            DialogInterface.BUTTON_NEGATIVE ->
+                                toast_n()
+                        }
+                    }
+                }
+                dialog.setPositiveButton("넹", dialog_listener)
+                dialog.setNegativeButton("아니요?", dialog_listener)
+                dialog.show()
 
             }
         }
@@ -335,33 +362,53 @@ class DateCountActivity : AppCompatActivity() {
             .setMessage("받은 변수를 붙여주십시오.")
 
         val editText: EditText = EditText(this)
-
-
+        //엔터 누르면 입력받음
+        val editListener:DialogInterface.OnKeyListener = object : DialogInterface.OnKeyListener {
+            override fun onKey(Dialog: DialogInterface?, num: Int, event: KeyEvent?): Boolean {
+                //event? event!!
+                if (event?.action == KeyEvent.KEYCODE_ENTER) {
+                    Toast.makeText(this@DateCountActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
+                    coupleName = editText.getText().toString()
+                    if (coupleName == "") {
+                        mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+                    } else {
+                        mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
+                    }
+                    return true
+                }
+                return false
+            }
+        }
+        dialog.setOnKeyListener(editListener)
         dialog.setView(editText)
         fun toast_p() {
             //입력
             coupleName = editText.getText().toString()
-            mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
-        }
-
-        fun toast_n() {
-            //취소
-        }
-
-        var dialog_listener = object : DialogInterface.OnClickListener {
-            override fun onClick(dialog: DialogInterface?, which: Int) {
-                when (which) {
-                    DialogInterface.BUTTON_POSITIVE ->
-                        toast_p()
-                    DialogInterface.BUTTON_NEGATIVE ->
-                        toast_n()
-                }
+            if (coupleName == "") {
+                mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+            } else {
+                mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
             }
         }
-        dialog.setPositiveButton("입력", dialog_listener)
-        dialog.setNegativeButton("취소", dialog_listener)
-        dialog.show()
-    }
+
+            fun toast_n() {
+                //취소
+            }
+
+            var dialog_listener = object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    when (which) {
+                        DialogInterface.BUTTON_POSITIVE ->
+                            toast_p()
+                        DialogInterface.BUTTON_NEGATIVE ->
+                            toast_n()
+                    }
+                }
+            }
+            dialog.setPositiveButton("입력", dialog_listener)
+            dialog.setNegativeButton("취소", dialog_listener)
+            dialog.show()
+        }
 
     fun DialogInvite() {
         if (coupleValue == null) {
