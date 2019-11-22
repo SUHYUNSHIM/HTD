@@ -125,6 +125,9 @@ class DateCountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datecount)
+        //실험. 공유기능
+
+
         //파이어베이스에 날짜정보가 있으면 하트 마크 들어온 상태
         if (sDay != 0) {
             val heart1 = findViewById<ImageButton>(R.id.bt_emptyheart)
@@ -172,7 +175,7 @@ class DateCountActivity : AppCompatActivity() {
                 var dialog = AlertDialog.Builder(this)
                 dialog.setTitle("변수입력")
                     .setMessage("다시 입력하시겠습니까?")
-                dialog.setIcon(R.mipmap.ic_launcher)
+                    .setIcon(R.mipmap.ic_launcher)
 
                 fun toast_p() {
                     DialogCombine()
@@ -193,8 +196,8 @@ class DateCountActivity : AppCompatActivity() {
                     }
                 }
                 dialog.setPositiveButton("넹", dialog_listener)
-                dialog.setNegativeButton("아니요?", dialog_listener)
-                dialog.show()
+                    .setNegativeButton("아니요?", dialog_listener)
+                    .show()
 
             }
         }
@@ -277,7 +280,7 @@ class DateCountActivity : AppCompatActivity() {
 
     internal fun UpdateNow1() {
         if (sDay == 0) {
-            mTxtDate1?.text = String.format("%d/%d/%d", mYear, mMonth, mDay)
+            mTxtDate1?.text = String.format("%d/%d/%d", mYear, mMonth+1, mDay)
         } else {
             mTxtDate1?.text = String.format("%d/%d/%d", sYear, sMonth, sDay)
         }
@@ -287,7 +290,7 @@ class DateCountActivity : AppCompatActivity() {
     internal fun UpdateNow2() {
 
         if (bDay == 0) {
-            mTxtDate2?.text = String.format("%d/%d/%d", mYear, mMonth, mDay)
+            mTxtDate2?.text = String.format("%d/%d/%d", mYear, mMonth+1, mDay)
         } else {
             mTxtDate2?.text = String.format("%d/%d/%d", bYear, bMonth, bDay)
         }
@@ -299,7 +302,7 @@ class DateCountActivity : AppCompatActivity() {
 
     internal fun UpdateNow3() {
         if (yDay == 0) {
-            mTxtDate3?.text = String.format("%d/%d/%d", mYear, mMonth, mDay)
+            mTxtDate3?.text = String.format("%d/%d/%d", mYear, mMonth+1, mDay)
         } else {
             mTxtDate3?.text = String.format("%d/%d/%d", yYear, yMonth, yDay)
         }
@@ -368,11 +371,14 @@ class DateCountActivity : AppCompatActivity() {
                 //event? event!!
                 if (event?.action == KeyEvent.KEYCODE_ENTER) {
                     Toast.makeText(this@DateCountActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
-                    coupleName = editText.getText().toString()
-                    if (coupleName == "") {
-                        mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+                    var otherName = editText.getText().toString()
+                    if (otherName == "") {
+                        Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                        DialogCombine()
+                     //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
                     } else {
-                        mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
+                        mDatabase.child(user!!.uid).child("CoupleName").setValue(otherName)
+
                     }
                     return true
                 }
@@ -380,14 +386,16 @@ class DateCountActivity : AppCompatActivity() {
             }
         }
         dialog.setOnKeyListener(editListener)
-        dialog.setView(editText)
+            .setView(editText)
         fun toast_p() {
             //입력
-            coupleName = editText.getText().toString()
-            if (coupleName == "") {
-                mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+            var otherName = editText.getText().toString()
+            if (otherName == "") {
+                Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                DialogCombine()
+               // mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
             } else {
-                mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
+                mDatabase.child(user!!.uid).child("CoupleName").setValue(otherName)
             }
         }
 
@@ -406,8 +414,8 @@ class DateCountActivity : AppCompatActivity() {
             }
         }
         dialog.setPositiveButton("입력", dialog_listener)
-        dialog.setNegativeButton("취소", dialog_listener)
-        dialog.show()
+            .setNegativeButton("취소", dialog_listener)
+            .show()
     }
 
     fun DialogInvite() {
@@ -418,7 +426,7 @@ class DateCountActivity : AppCompatActivity() {
             var dialog = AlertDialog.Builder(this)
             dialog.setTitle("초대하기")
                 .setMessage("다시 초대하시겠습니까?")
-            dialog.setIcon(R.mipmap.ic_launcher)
+                .setIcon(R.mipmap.ic_launcher)
 
             fun toast_p() {
                 sendMessage()
@@ -440,8 +448,8 @@ class DateCountActivity : AppCompatActivity() {
                 }
             }
             dialog.setPositiveButton("넹", dialog_listener)
-            dialog.setNegativeButton("아닌데요?", dialog_listener)
-            dialog.show()
+                .setNegativeButton("아닌데요?", dialog_listener)
+                .show()
 
 
         }
