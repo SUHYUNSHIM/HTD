@@ -173,8 +173,6 @@ class DateCountActivity : AppCompatActivity() {
         }
 
 
-
-
         mTxtDate1 = findViewById<View>(R.id.val_firstdate) as TextView
         mTxtDate2 = findViewById<View>(R.id.val_yourbitrhday) as TextView
         mTxtDate3 = findViewById<View>(R.id.val_loverbithday) as TextView
