@@ -3,7 +3,8 @@ package com.example.hows_this_day
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import kotlinx.android.synthetic.main.activity_tap.*
+import kotlinx.android.synthetic.main.activity_tab.*
+
 
 class TabActivity : AppCompatActivity() {
 
@@ -11,7 +12,7 @@ class TabActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tap)
+        setContentView(R.layout.activity_tab)
 
         // 뷰페이저 어댑터 연결
         testView.adapter = TabActivity@adapter
