@@ -233,7 +233,7 @@ class ImagePickerActivity : AppCompatActivity() {
             }
 
             // create and show the alert dialog
-            val dialog = builder.create()
+            val dialog= builder.create()
             dialog.show()
         }
 

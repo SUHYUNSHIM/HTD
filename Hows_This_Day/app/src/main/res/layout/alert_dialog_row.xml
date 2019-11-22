@@ -2,20 +2,34 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:gravity="center"
     android:layout_margin="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/alertDialogItemImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/alertDialogItemTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/alertDialogItemImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginRight="70dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/alertDialogItemTextView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/alertDialogItemTextView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/alertDialogItemTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@id/alertDialogItemImageView"
+            app:layout_constraintLeft_toRightOf="@id/alertDialogItemImageView"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

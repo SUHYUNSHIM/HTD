@@ -11,7 +11,6 @@ import com.example.hows_this_day.BaseCalendar
 import com.example.hows_this_day.R
 import com.example.hows_this_day.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_b.*
-import kotlinx.android.synthetic.main.fragment_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,16 +18,16 @@ class BFragment : Fragment() {
 
     lateinit var scheduleRecyclerViewAdapter: RecyclerViewAdapter
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_b, container, false)
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //뷰 설정
-        tvFragmentMain
         initView()
+        //뷰 설정g
+
     }
 
     fun initView() {
@@ -48,7 +47,6 @@ class BFragment : Fragment() {
             scheduleRecyclerViewAdapter.changeToNextMonth()
         }
     }
-
     fun refreshCurrentMonth(calendar: Calendar) {
         val sdf = SimpleDateFormat("yyyy MM", Locale.KOREAN)
         tv_current_month.text = sdf.format(calendar.time)
