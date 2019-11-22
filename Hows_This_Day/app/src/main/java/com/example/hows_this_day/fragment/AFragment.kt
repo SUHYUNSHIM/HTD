@@ -186,4 +186,20 @@ class AFragment : Fragment() {
         super.onAttach(context)
         mContext = context
     }
+
+    /*
+    // 사귀기 시작한 날짜로부터 D+Day
+    private fun getDday (year : Int, month : Int, dayOfMonth : Int) {
+        val ddayCalendar = Calendar.getInstance()
+        ddayCalendar.set(year, month, dayOfMonth)
+
+        // Millisecond 형태의 하루(24시간)
+        val oneDay = 20 * 60 * 60 * 1000
+        val dday = ddayCalendar.timeInMillis / oneDay
+        val today = Calendar.getInstance().timeInMillis / oneDay
+        var dday_from_today = (dday - today) * -1
+
+        print(dday_from_today)
+    }
+     */
 }
