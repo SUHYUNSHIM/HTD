@@ -7,10 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -19,37 +16,39 @@ import java.util.*
 
 
 class DateCountActivity : AppCompatActivity() {
-    lateinit var name:String
-    private var coupleValue : Boolean? = null
-    var mYear : Int = 0
+    lateinit var name: String
+    private var coupleValue: Boolean? = null
+    private var coupleName: String? = null
+    var mYear: Int = 0
     var mMonth: Int = 0
-    var mDay  :Int = 0
+    var mDay: Int = 0
     //생일 변수
-    var bDay : Int = 0
-    var bMonth : Int = 0
-    var bYear : Int = 0
+    var bDay: Int = 0
+    var bMonth: Int = 0
+    var bYear: Int = 0
     // 시작일 변수
-    var sDay:Int = 0
-    var sMonth:Int = 0
-    var sYear:Int = 0
+    var sDay: Int = 0
+    var sMonth: Int = 0
+    var sYear: Int = 0
     //애인변수
-    var yDay:Int = 0
-    var yMonth:Int = 0
-    var yYear:Int = 0
-    val mDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
+    var yDay: Int = 0
+    var yMonth: Int = 0
+    var yYear: Int = 0
+    val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
     val user = FirebaseAuth.getInstance().currentUser
-    internal var mTxtDate1: TextView?= null
-    internal var mTxtDate2: TextView?= null
-    internal var mTxtDate3: TextView?= null
+    val uid = user!!.uid
+    internal var mTxtDate1: TextView? = null
+    internal var mTxtDate2: TextView? = null
+    internal var mTxtDate3: TextView? = null
     var postReference = mDatabase.child(user!!.uid)
-    val postListener = object:ValueEventListener{
+    val postListener = object : ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
         }
 
         override fun onDataChange(datasnapshot: DataSnapshot) {
             val Start = datasnapshot.child("StartDay").getValue(CalendarData::class.java)
-            Start?.let{
+            Start?.let {
                 sDay = it.Day
                 sMonth = it.Month
                 sYear = it.Year
@@ -57,16 +56,16 @@ class DateCountActivity : AppCompatActivity() {
                 heartSelected1()
             }
             val Birth = datasnapshot.child("BirthDay").getValue(CalendarData::class.java)
-            Birth?.let{
+            Birth?.let {
                 bDay = it.Day
                 bMonth = it.Month
                 bYear = it.Year
                 UpdateNow2()
                 heartSelected2()
-                Log.d("BirthDay is" , "$bYear/$bMonth/$bDay")
+                Log.d("BirthDay is", "$bYear/$bMonth/$bDay")
             }
             val Your = datasnapshot.child("YourDay").getValue(CalendarData::class.java)
-            Your?.let{
+            Your?.let {
                 yDay = it.Day
                 yMonth = it.Month
                 yYear = it.Year
@@ -74,13 +73,9 @@ class DateCountActivity : AppCompatActivity() {
                 heartSelecte3()
             }
             coupleValue = datasnapshot.child("CoupleValue").getValue(Boolean::class.java)
+            coupleName = datasnapshot.child("CoupleName").getValue(String::class.java)
         }
     }
-
-
-
-
-
 
 
     //날짜 대화상자 리스너 부분
@@ -94,7 +89,7 @@ class DateCountActivity : AppCompatActivity() {
 
             //텍스트뷰의 값을 업데이트함
             UpdateNow1()
-            databaseUpdate("StartDay",mYear,mMonth,mDay)
+            databaseUpdate("StartDay", mYear, mMonth, mDay)
         }
     internal var mDateSetListener2: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -107,7 +102,7 @@ class DateCountActivity : AppCompatActivity() {
             //텍스트뷰의 값을 업데이트함
             UpdateNow2()
             //데이터베이스 업데이트
-            databaseUpdate("BirthDay",mYear,mMonth,mDay)
+            databaseUpdate("BirthDay", mYear, mMonth, mDay)
 
         }
 
@@ -121,29 +116,28 @@ class DateCountActivity : AppCompatActivity() {
 
             //텍스트뷰의 값을 업데이트함
             UpdateNow3()
-            databaseUpdate("YourDay",mYear,mMonth,mDay)
+            databaseUpdate("YourDay", mYear, mMonth, mDay)
 
         }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datecount)
         //파이어베이스에 날짜정보가 있으면 하트 마크 들어온 상태
-        if (sDay != 0){
+        if (sDay != 0) {
             val heart1 = findViewById<ImageButton>(R.id.bt_emptyheart)
             heart1.isSelected
 
-        } else{
+        } else {
 
         }
-        if (bDay != 0){
+        if (bDay != 0) {
             bt_emptyheart2.setSelected(true)
-        } else{
+        } else {
 
         }
-        if (yDay != 0){
+        if (yDay != 0) {
             bt_emptyheart3.setSelected(true)
         }
 
@@ -163,37 +157,18 @@ class DateCountActivity : AppCompatActivity() {
             val HTDintent = Intent(this, TabActivity::class.java)
             startActivity(HTDintent)
         })
+        //초대기능
         val invite = findViewById<Button>(R.id.button_invite)
-        invite.setOnClickListener(){
-            if (coupleValue == null) {
-                sendMessage()
-                mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
-            }else {
-                var dialog = AlertDialog.Builder(this)
-                dialog.setTitle("초대하기")
-                    .setMessage("다시 초대하시겠습니까?")
-                dialog.setIcon(R.mipmap.ic_launcher)
+        invite.setOnClickListener() {
+            DialogInvite()
+        }
+        //합기능
+        val combine = findViewById<Button>(R.id.button_combine)
+        combine.setOnClickListener() {
+            if (coupleName == null) {
+                DialogCombine()
+            } else {
 
-                fun toast_p() {
-                    sendMessage()
-                    mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
-                }
-                fun toast_n(){
-                    Toast.makeText(this@DateCountActivity, "그러시든가", Toast.LENGTH_SHORT).show()
-                }
-                var dialog_listener = object:DialogInterface.OnClickListener{
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        when(which){
-                            DialogInterface.BUTTON_POSITIVE ->
-                                toast_p()
-                            DialogInterface.BUTTON_NEGATIVE ->
-                                toast_n()
-                        }
-                    }
-                }
-                dialog.setPositiveButton("넹",dialog_listener)
-                dialog.setNegativeButton("아닌데요?",dialog_listener)
-                dialog.show()
             }
         }
 
@@ -216,12 +191,10 @@ class DateCountActivity : AppCompatActivity() {
         UpdateNow3()
 
 
-
-
-
         //    var BirthPost = postReference.child("BirthDay").addValueEventListener(postListener)
         //  Log.d("BirthValue",BirthPost.toString())
     }
+
     fun mOnClick(v: View) {
 
         when (v.id) {
@@ -237,7 +210,7 @@ class DateCountActivity : AppCompatActivity() {
                     mMonth = cal.get(Calendar.MONTH)
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener1, mYear, mMonth, mDay).show()
-                } else{
+                } else {
                     DatePickerDialog(this, mDateSetListener1, sYear, sMonth, sDay).show()
                 }
                 //     bt_emptyheart.setSelected(true)
@@ -268,15 +241,8 @@ class DateCountActivity : AppCompatActivity() {
                 } else {
                     DatePickerDialog(this, mDateSetListener3, yYear, yMonth, yDay).show()
                 }
-                //    bt_emptyheart3.setSelected(true)
             }
-            //초대보내기
 
-            //연동하기
-            R.id.button_combination -> {
-                val HTDintent = Intent(this, TabActivity::class.java)
-                startActivity(HTDintent)
-            }
         }
     }
 
@@ -285,11 +251,12 @@ class DateCountActivity : AppCompatActivity() {
     internal fun UpdateNow1() {
         if (sDay == 0) {
             mTxtDate1?.text = String.format("%d/%d/%d", mYear, mMonth, mDay)
-        } else{
+        } else {
             mTxtDate1?.text = String.format("%d/%d/%d", sYear, sMonth, sDay)
         }
 
     }
+
     internal fun UpdateNow2() {
 
         if (bDay == 0) {
@@ -312,49 +279,124 @@ class DateCountActivity : AppCompatActivity() {
     }
 
 
-    fun heartSelected1(){
-        if (sDay != 0){
+    fun heartSelected1() {
+        if (sDay != 0) {
             val heart1 = findViewById<ImageButton>(R.id.bt_emptyheart)
             heart1.setSelected(true)
 
-        } else{
+        } else {
 
         }
     }
-    fun heartSelected2(){
-        if (bDay != 0){
+
+    fun heartSelected2() {
+        if (bDay != 0) {
             val heart2 = findViewById<ImageButton>(R.id.bt_emptyheart2)
             heart2.setSelected(true)
 
-        } else{
+        } else {
 
         }
     }
-    fun heartSelecte3(){
-        if (yDay != 0){
+
+    fun heartSelecte3() {
+        if (yDay != 0) {
             val heart3 = findViewById<ImageButton>(R.id.bt_emptyheart3)
             heart3.setSelected(true)
 
-        } else{
+        } else {
 
         }
     }
+
     fun databaseUpdate(
 
-        DayValue:String,
+        DayValue: String,
         Year: Int,
-        Month :Int,
+        Month: Int,
         Day: Int
     ) {
-        val User = CalendarData(Year,Month+1,Day)
-        mDatabase.child(user!!.uid).child(DayValue).setValue(User)
+        val User = CalendarData(Year, Month + 1, Day)
+        mDatabase.child(uid).child(DayValue).setValue(User)
     }
-    fun sendMessage(){
+
+    fun sendMessage() {
         val email: Intent = Intent(android.content.Intent.ACTION_SEND)
         email.setType("plain/text")
-        email.putExtra(Intent.EXTRA_EMAIL,"ddd333@naver.com")
-        email.putExtra(Intent.EXTRA_SUBJECT,"$name 님께서 당신을 여기어떄로 초대합니다.")
-        email.putExtra(Intent.EXTRA_TEXT,"넌 나에게 모욕감을 줬어\n$postReference 를 복사해 주세요")
+        email.putExtra(Intent.EXTRA_EMAIL, "ddd333@naver.com")
+        email.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어떄로 초대합니다.")
+        email.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
         startActivity(email)
+    }
+
+    fun DialogCombine() {
+        var dialog = AlertDialog.Builder(this)
+        dialog.setTitle("타이틀은 글쎄")
+            .setMessage("받은 변수를 붙여주십시오.")
+
+        val editText: EditText = EditText(this)
+
+
+        dialog.setView(editText)
+        fun toast_p() {
+            //입력
+            coupleName = editText.getText().toString()
+            mDatabase.child(user!!.uid).child("CoupleName").setValue(coupleName)
+        }
+
+        fun toast_n() {
+            //취소
+        }
+
+        var dialog_listener = object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                when (which) {
+                    DialogInterface.BUTTON_POSITIVE ->
+                        toast_p()
+                    DialogInterface.BUTTON_NEGATIVE ->
+                        toast_n()
+                }
+            }
+        }
+        dialog.setPositiveButton("입력", dialog_listener)
+        dialog.setNegativeButton("취소", dialog_listener)
+        dialog.show()
+    }
+
+    fun DialogInvite() {
+        if (coupleValue == null) {
+            sendMessage()
+            mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
+        } else {
+            var dialog = AlertDialog.Builder(this)
+            dialog.setTitle("초대하기")
+                .setMessage("다시 초대하시겠습니까?")
+            dialog.setIcon(R.mipmap.ic_launcher)
+
+            fun toast_p() {
+                sendMessage()
+                mDatabase.child(user!!.uid).child("CoupleValue").setValue(true)
+            }
+
+            fun toast_n() {
+                Toast.makeText(this@DateCountActivity, "그러시든가", Toast.LENGTH_SHORT).show()
+            }
+
+            var dialog_listener = object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    when (which) {
+                        DialogInterface.BUTTON_POSITIVE ->
+                            toast_p()
+                        DialogInterface.BUTTON_NEGATIVE ->
+                            toast_n()
+                    }
+                }
+            }
+            dialog.setPositiveButton("넹", dialog_listener)
+            dialog.setNegativeButton("아닌데요?", dialog_listener)
+            dialog.show()
+
+
+        }
     }
 }
