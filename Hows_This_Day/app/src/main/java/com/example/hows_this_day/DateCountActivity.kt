@@ -14,6 +14,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_datecount.*
 import java.util.*
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class DateCountActivity : AppCompatActivity() {
@@ -348,12 +354,58 @@ class DateCountActivity : AppCompatActivity() {
     }
 
     fun sendMessage() {
+        val emailIntent = Intent(Intent.ACTION_SEND)
+
+        try {
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
+
+            emailIntent.type = "plain/Text"
+            emailIntent.setPackage("com.google.android.gm")
+            if (emailIntent.resolveActivity(packageManager) != null) {
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어떄로 초대합니다.")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
+                startActivity(emailIntent)
+            }
+            startActivity(emailIntent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            //emailIntent.type = "plain/Text"
+            //emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
+            //emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어떄로 초대합니다.")
+            //emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
+
+            startActivity(Intent.createChooser(emailIntent, "Send Email"))
+        }
+
+
+        /*
+        val email = Intent(Intent.ACTION_SEND)
+        email.type = "plain/Text"
+        email.putExtra(Intent.EXTRA_EMAIL, getString(R.string.email))
+        email.putExtra(
+            Intent.EXTRA_SUBJECT,
+            "<" + getString(R.string.app_name) + " " + getString(R.string.report) + ">"
+        )
+        email.putExtra(
+            Intent.EXTRA_TEXT,
+            "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요"
+        )
+        email.type = "message/rfc822"
+        startActivity(email)
+        */
+
+        /*
         val email: Intent = Intent(android.content.Intent.ACTION_SEND)
         email.setType("plain/text")
-        email.putExtra(Intent.EXTRA_EMAIL, "ddd333@naver.com")
+        val address = arrayOf("email@address.com")
+        email.putExtra(Intent.EXTRA_EMAIL, address)
         email.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어떄로 초대합니다.")
         email.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
         startActivity(email)
+
+        */
     }
 
     fun DialogCombine() {
