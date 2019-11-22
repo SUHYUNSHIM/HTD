@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.hows_this_day.DateCountActivity
 import com.example.hows_this_day.ImagePickerActivity
 import com.example.hows_this_day.R
 import com.karumi.dexter.Dexter
@@ -29,6 +30,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.IOException
+import java.util.*
 
 
 class AFragment : Fragment() {
@@ -45,6 +47,7 @@ class AFragment : Fragment() {
         //뷰 설정g
         tvFragmentMain
         onProflieClick()
+        getDday(DateCountActivity().sYear, DateCountActivity().sMonth, DateCountActivity().sDay)
     }
 
     private fun loadProfile(url: String) {
@@ -187,7 +190,6 @@ class AFragment : Fragment() {
         mContext = context
     }
 
-    /*
     // 사귀기 시작한 날짜로부터 D+Day
     private fun getDday (year : Int, month : Int, dayOfMonth : Int) {
         val ddayCalendar = Calendar.getInstance()
@@ -201,5 +203,4 @@ class AFragment : Fragment() {
 
         print(dday_from_today)
     }
-     */
 }
