@@ -3,6 +3,7 @@ package com.example.hows_this_day.fragment
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -51,7 +52,7 @@ class AFragment : Fragment() {
 
         imgProfile = getView()?.findViewById(R.id.my_image)
         imgProfile?.let { Glide.with(this).load(url).into(it) }
-        imgProfile?.setColorFilter(ContextCompat.getColor(this.getActivity()!!.applicationContext, android.R.color.transparent))
+        imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
     }
 
     private fun onProflieClick() {
@@ -81,7 +82,7 @@ class AFragment : Fragment() {
     }
 
     private fun showImagePickerOptions() {
-        ImagePickerActivity.showImagePickerOptions(this.getActivity()!!.applicationContext,
+        ImagePickerActivity.showImagePickerOptions(mContext,
             object : ImagePickerActivity.PickerOptionListener {
                 override fun onTakeCameraSelected() {
                     launchCameraIntent()
@@ -152,7 +153,7 @@ class AFragment : Fragment() {
      * NOTE: Keep proper title and message depending on your app
      */
     private fun showSettingsDialog() {
-        val builder = AlertDialog.Builder(this.getActivity()!!.applicationContext)
+        val builder = AlertDialog.Builder(mContext)
         builder.setTitle(getString(R.string.dialog_permission_title))
         builder.setMessage(getString(R.string.dialog_permission_message))
         builder.setPositiveButton(getString(R.string.go_to_settings)) { dialog, _ ->
@@ -177,5 +178,12 @@ class AFragment : Fragment() {
     companion object {
         private val TAG = AFragment::class.java.simpleName
         val REQUEST_IMAGE = 100
+    }
+
+    // Fragment에서 getActivity()와 getContext()가 null을 반환하여 만드는 코드 부분
+    lateinit var mContext : Context
+    override fun onAttach(context : Context) {
+        super.onAttach(context)
+        mContext = context
     }
 }
