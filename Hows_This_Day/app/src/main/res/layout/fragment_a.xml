@@ -41,7 +41,7 @@
                 app:srcCompat="@drawable/my_profile"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                />
+                android:onClick="onClick" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -62,7 +62,7 @@
                 app:srcCompat="@drawable/lover_profile"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                 />
+                android:onClick="onClick" />
 
         </LinearLayout>
 

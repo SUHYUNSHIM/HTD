@@ -10,19 +10,26 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.hows_this_day.R
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.util.ArrayList
 import java.util.HashMap
 
-
 class CFragment : Fragment() {
 
+    internal var textview_result: TextView? = null
+    internal var dialogItemList: MutableList<Map<String, Any>>? = null
 
-    var dialogItemList: MutableList<Map<String, Any>>? = null
+    internal var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)
+    internal var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")
 
-    var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)
-    var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        textview_result = getView()?.findViewById<View>(R.id.textview_main_text) as TextView
+
+        val button_run = getView()?.findViewById<View>(R.id.button_main_run) as Button
+        button_run.setOnClickListener { showAlertDialog() }
 
         dialogItemList = ArrayList()
 
@@ -31,22 +38,20 @@ class CFragment : Fragment() {
             itemMap[TAG_IMAGE] = image[i]
             itemMap[TAG_TEXT] = text[i]
             dialogItemList?.add(itemMap)
-        }
 
+        }
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val button_run = getView()?.findViewById<View>(R.id.bt_datechooser) as Button?
-        button_run?.setOnClickListener { showAlertDialog() }
+
+        //뷰 설정
+        //tvFragmentMain
 
     }
-
-
     private fun showAlertDialog() {
 
-        var tvresult = getView()?.findViewById<View>(R.id.textview_main_text) as TextView?
         val builder = AlertDialog.Builder(getActivity())
         val inflater = layoutInflater
         val view = inflater.inflate(R.layout.alert_dialog, null)
@@ -65,8 +70,7 @@ class CFragment : Fragment() {
         listview.adapter = simpleAdapter
         listview.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-
-                tvresult?.text = (text[position] )
+                textview_result?.text = (text[position] + "를(을) 선택했습니다.")
                 dialog.dismiss()
             }
 

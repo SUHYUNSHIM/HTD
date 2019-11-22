@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hows_this_day">
 
@@ -19,10 +18,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <activity android:name=".InviteActivity"></activity>
+
         <activity
             android:name=".TabActivity"
-            android:label=".HTDActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_htd"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".LoadingActivity" />
 
