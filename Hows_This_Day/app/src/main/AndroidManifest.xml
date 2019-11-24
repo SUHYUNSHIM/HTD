@@ -17,7 +17,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".InviteActivity"/>
-        <activity android:name=".FontActivity"/>
 
         <activity
             android:name=".TabActivity"

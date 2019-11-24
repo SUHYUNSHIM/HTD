@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import java.util.ArrayList
 import java.util.HashMap
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
@@ -40,12 +41,9 @@ class CFragment : Fragment() {
 
     internal var picture: ImageView? = null
 
-    //val picture = getView()?.findViewById(R.id.bt_gallery) as ImageView?
     var dialogItemList: MutableList<Map<String, Any>>? = null                             //날짜선택 list
     var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)   //날짜 선택 dialog에 나타날 이미지
     var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")
-    //val intent = Intent(Intent.ACTION_GET_CONTENT)
-    //var resolver : ContentResolver? = getActivity()?.getContentResolver()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,6 +56,12 @@ class CFragment : Fragment() {
             itemMap[TAG_TEXT] = text[i]
             dialogItemList?.add(itemMap)
         }
+        //custom font
+        val tv_dialog_date = getView()?.findViewById(R.id.textview_main_text) as TextView?
+        tv_dialog_date?.typeface = Typeface.createFromAsset(getActivity()?.getAssets(), "fonts/netmarble_bold.ttf")
+        val et_diary = getView()?.findViewById(R.id.multiAutoCompleteTextView2) as MultiAutoCompleteTextView?
+        et_diary?.typeface = Typeface.createFromAsset(getActivity()?.getAssets(), "fonts/netmarble_light.ttf")
+
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
 
@@ -129,8 +133,8 @@ class CFragment : Fragment() {
 
         // setting maximum bitmap width and height
         intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true)
-        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000)
-        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000)
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 800)
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 800)
 
         startActivityForResult(intent, REQUEST_IMAGE)
     }
@@ -167,11 +171,7 @@ class CFragment : Fragment() {
             }
         }
     }
-    /**
-     * Showing Alert Dialog with Settings option
-     * Navigates user to app settings
-     * NOTE: Keep proper title and message depending on your app
-     */
+
     private fun showSettingsDialog() {
         val builder = AlertDialog.Builder(mContext)
         builder.setTitle(getString(R.string.dialog_permission_title))

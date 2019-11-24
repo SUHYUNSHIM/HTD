@@ -34,6 +34,8 @@ class LoadingActivity : AppCompatActivity() {
         //custom font 적용
         val tv_font2 = findViewById(R.id.textView3) as TextView
         tv_font2.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_regular.ttf")
+        val tv_your_name =findViewById(R.id.username_in_loading) as TextView
+        tv_your_name.typeface = Typeface.createFromAsset(getAssets(),"fonts/netmarble_bold.ttf")
 
     }
     private fun startLoading() {

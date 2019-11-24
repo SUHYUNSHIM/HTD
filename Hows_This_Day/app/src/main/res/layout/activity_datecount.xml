@@ -13,6 +13,7 @@
         android:layout_width="248dp"
         android:layout_height="45dp"
         android:layout_marginTop="88dp"
+        android:paddingTop="15dp"
         android:text="하트를 눌러 아래 날짜들을 설정해 주세요"
         app:layout_constraintStart_toEndOf="@+id/button_invite"
         app:layout_constraintTop_toTopOf="parent" />
@@ -110,6 +111,8 @@
             android:layout_height="51dp"
             android:layout_marginStart="130dp"
             android:layout_marginTop="50dp"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
             android:text="TextView"
             android:textSize="18sp" />
 

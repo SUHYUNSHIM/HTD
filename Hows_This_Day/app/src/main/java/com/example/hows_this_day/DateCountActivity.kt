@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -130,6 +131,25 @@ class DateCountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datecount)
+
+        //custom font
+        val tv_first_date = findViewById(R.id.tv_firstdate) as TextView?
+        tv_first_date?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_regular.ttf")
+        val tv_your_birthday = findViewById(R.id.tv_yourbirthday) as TextView?
+        tv_your_birthday?.typeface =Typeface.createFromAsset(getAssets(),"fonts/netmarble_regular.ttf")
+        val tv_lover_birthday = findViewById(R.id.tv_loverbithday) as TextView?
+        tv_lover_birthday?.typeface = Typeface.createFromAsset(getAssets(),"fonts/netmarble_regular.ttf")
+        val val_first_date = findViewById(R.id.val_firstdate) as TextView?
+        val_first_date?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
+        val val_your_birthday = findViewById(R.id.val_yourbitrhday) as TextView?
+        val_your_birthday?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
+        val val_lover_birthday = findViewById(R.id.val_loverbithday) as TextView?
+        val_lover_birthday?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
+
+
+
+
+
         //실험. 공유기능
 
 
@@ -206,8 +226,6 @@ class DateCountActivity : AppCompatActivity() {
 
             }
         }
-
-
 
 
         mTxtDate1 = findViewById<View>(R.id.val_firstdate) as TextView
