@@ -5,16 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background= "#f7cac9"
     tools:context=".DateCountActivity">
 
     <TextView
         android:id="@+id/tv_msg"
         android:layout_width="248dp"
         android:layout_height="45dp"
+        android:layout_marginTop="88dp"
         android:text="하트를 눌러 아래 날짜들을 설정해 주세요"
-        app:layout_constraintEnd_toStartOf="@+id/연동"
         app:layout_constraintStart_toEndOf="@+id/button_invite"
-        app:layout_constraintTop_toBottomOf="@+id/연동" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -105,8 +106,8 @@
 
         <TextView
             android:id="@+id/date_count_username"
-            android:layout_width="188dp"
-            android:layout_height="43dp"
+            android:layout_width="141dp"
+            android:layout_height="51dp"
             android:layout_marginStart="130dp"
             android:layout_marginTop="50dp"
             android:text="TextView"
@@ -118,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="130dp"
             android:text="이날어때 시작하기"
-            android:textColor="#FCFCFC" />
+            android:textColor="#8ca4cf" />
 
     </LinearLayout>
 

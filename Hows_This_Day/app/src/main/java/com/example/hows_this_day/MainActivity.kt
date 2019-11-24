@@ -1,12 +1,17 @@
 package com.example.hows_this_day
 
+import android.content.DialogInterface
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 
 
 import android.widget.Toast;
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -20,6 +25,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
@@ -53,6 +64,13 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         val myRef : DatabaseReference = database.getReference("message")
         myRef.setValue("안녕 반가워!")
 
+        //cupid 애니메이션 효과
+        val iv = findViewById(R.id.cupid) as ImageView
+        val anim = AnimationUtils.loadAnimation(
+            applicationContext, // 현재화면의 제어권자
+            R.anim.cupid  // 애니메이션 설정 파일
+        )
+        iv.startAnimation(anim)
 
 
         //구글로그인 버튼에 대한 이벤트
