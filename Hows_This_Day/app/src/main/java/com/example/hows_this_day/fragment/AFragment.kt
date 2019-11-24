@@ -33,12 +33,12 @@ import java.io.IOException
 import java.util.*
 
 
-class AFragment : Fragment() {
+class AFragment : Fragment()  {
 
     internal var imgProfile: ImageView? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_a, container, false)
+   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+      return inflater.inflate(R.layout.fragment_a, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,7 +48,10 @@ class AFragment : Fragment() {
         tvFragmentMain
         onProflieClick()
         getDday(DateCountActivity().sYear, DateCountActivity().sMonth, DateCountActivity().sDay)
+
     }
+
+
 
     private fun loadProfile(url: String) {
         Log.d(TAG, "Image cache path: $url")
@@ -56,6 +59,8 @@ class AFragment : Fragment() {
         imgProfile = getView()?.findViewById(R.id.my_image)
         imgProfile?.let { Glide.with(this).load(url).into(it) }
         imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
+
+
     }
 
     private fun onProflieClick() {

@@ -1,9 +1,10 @@
 package com.example.hows_this_day
 
-import android.content.DialogInterface
+
 import android.content.Intent;
+import android.graphics.fonts.Font
 import android.os.Bundle;
-import android.view.View
+//import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
+//import androidx.core.app.ActivityCompat.startActivityForResult
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,15 +27,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import android.graphics.Typeface
 import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
+//import androidx.core.app.ComponentActivity
+//import androidx.core.app.ComponentActivity.ExtraData
+//import androidx.core.content.ContextCompat.getSystemService
+//import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+//import android.content.DialogInterface
 
 
-class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
+class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener {
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mAuth: FirebaseAuth? = null
 
@@ -71,6 +81,11 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
             R.anim.cupid  // 애니메이션 설정 파일
         )
         iv.startAnimation(anim)
+
+
+        //커스텀 폰트 적용
+        val tv_font = findViewById(R.id.textView) as TextView
+         tv_font.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_bold.ttf")
 
 
         //구글로그인 버튼에 대한 이벤트

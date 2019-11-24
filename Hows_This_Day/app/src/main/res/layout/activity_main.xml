@@ -20,8 +20,8 @@ tools:context="com.example.hows_this_day.MainActivity"
 
             <ImageView
                 android:id="@+id/cupid"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginBottom="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -45,6 +45,22 @@ tools:context="com.example.hows_this_day.MainActivity"
                 app:layout_constraintTop_toBottomOf="@id/cupid">
 
             </com.google.android.gms.common.SignInButton>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="152dp"
+                android:fontFamily="netmarble_bold"
+                android:text="이날어때"
+                android:textSize="50sp"
+                app:layout_constraintHorizontal_bias="0.546"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
