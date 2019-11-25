@@ -106,8 +106,6 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                                 //선택 x
                                                                 holder.bt_emptydate.setSelected(false)
                                                                 holder.bt_emptydate.setPressed(false)
-                                                                mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
-                                                                    .setValue(null)
                                                             }
                                                     }
                                                 }
@@ -144,12 +142,21 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 Log.d("HeartClick2", mMonth.toString())
                 if (Invited == true) {
                     if (holder.bt_emptydate.isSelected == true) {
+                        if( holder.bt_emptydate.isPressed == false) {
+                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                                .setValue(null)
+                        }
                         databaseDelete(mYear, mMonth, mDate)
                     } else {
                         databaseUpdate(mYear, mMonth, mDate)
                     }
                 } else{
                     if (holder.bt_emptydate.isPressed == true){
+                        if (holder.bt_emptydate.isSelected == false){
+                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                                .setValue(null)
+
+                        }
                         databaseDelete(mYear,mMonth,mDate)
                     } else{
                         databaseUpdate(mYear, mMonth, mDate)
