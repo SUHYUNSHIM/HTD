@@ -64,7 +64,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
                 roomName = datasnapshot.child("CoupleRoom").getValue(String::class.java)
-                val mReference = mDatabase.child(roomName!!)
+                val mReference = roomName?.let { mDatabase.child(it) }
                 val Listener = object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
                         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -119,7 +119,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                         }
                     }
                 }
-                mReference.addValueEventListener(Listener)
+                mReference?.addValueEventListener(Listener)
             }
         }
 

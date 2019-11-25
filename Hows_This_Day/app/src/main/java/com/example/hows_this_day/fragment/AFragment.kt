@@ -238,7 +238,7 @@ class AFragment : Fragment() {
                 val today = Calendar.getInstance().getTimeInMillis() / oneDay
                 val dday_from_today : Long = (dday - today) + 1
 
-                d_day.setText(String.format("D+%d", dday_from_today))
+                d_day?.setText(String.format("D+%d", dday_from_today))
             }
         }
         postReference.addValueEventListener(postListener)
