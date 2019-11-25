@@ -5,7 +5,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,16 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.hows_this_day.CalendarData
-import com.example.hows_this_day.DateCountActivity
 import com.example.hows_this_day.ImagePickerActivity
 import com.example.hows_this_day.R
 import com.google.firebase.auth.FirebaseAuth
@@ -230,13 +226,13 @@ class AFragment : Fragment() {
                 }
 
                 val ddayCalendar = Calendar.getInstance()
-                sYear?.let { sMonth?.let { it1 -> sDay?.let { it2 -> ddayCalendar.set(it, it1, it2) } } }
+                sYear?.let { sMonth?.let { it1 -> sDay?.let { it2 -> ddayCalendar.set(it, it1 - 1, it2) } } }
 
                 // Millisecond 형태의 하루(24시간)
                 val oneDay: Long = 24 * 60 * 60 * 1000
                 val dday = ddayCalendar.getTimeInMillis() / oneDay
                 val today = Calendar.getInstance().getTimeInMillis() / oneDay
-                val dday_from_today : Long = (dday - today) + 1
+                val dday_from_today : Long = (today - dday) + 1
 
                 d_day?.setText(String.format("D+%d", dday_from_today))
             }
