@@ -28,7 +28,6 @@ class DateCountActivity : AppCompatActivity() {
     //나는 초대를 보냈었다.
     private var Invited:Boolean? = false
    // private var coupleName: String? = null
-    var RoomName:String =""
     var mYear: Int = 0
     var mMonth: Int = 0
     var mDay: Int = 0
@@ -392,7 +391,7 @@ class DateCountActivity : AppCompatActivity() {
             if (emailIntent.resolveActivity(packageManager) != null) {
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n[$RoomName] 를 복사해 주세요")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n  $uid 를 복사해 주세요")
             }
                 startActivity(emailIntent)
 
@@ -402,7 +401,7 @@ class DateCountActivity : AppCompatActivity() {
             emailIntent.type = "text/html"
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$[$RoomName] 를 복사해 주세요")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
             startActivity(Intent.createChooser(emailIntent, "Send Email"))
         }
 
@@ -512,42 +511,15 @@ class DateCountActivity : AppCompatActivity() {
     //초대 메일 보내기
     fun RoomSend(){
         var dialog = AlertDialog.Builder(this)
-        dialog.setTitle("방제 입력")
-            .setMessage("방의 이름을 를 정해주십시오.")
+        dialog.setTitle("방제 전달")
+            .setMessage("방제를 상대에게 전하시겠습니까?")
 
-        val editText: EditText = EditText(this)
-        val editListener:DialogInterface.OnKeyListener = object : DialogInterface.OnKeyListener {
-            override fun onKey(Dialog: DialogInterface?, num: Int, event: KeyEvent?): Boolean {
-                //event? event!!
-                if (event?.action == KeyEvent.KEYCODE_ENTER) {
-                    Toast.makeText(this@DateCountActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
-                     RoomName = editText.getText().toString()
-                    if (RoomName == "") {
-                        Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
-                        DialogInvite()
-                        //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
-                    } else {
-                        mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
-                        sendMessage()
-                    }
-                    return true
-                }
-                return false
-            }
-        }
-        dialog.setOnKeyListener(editListener)
-            .setView(editText)
         fun toast_p() {
             //입력
-             RoomName = editText.getText().toString()
-            if (RoomName == "") {
-                Toast.makeText(this@DateCountActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
-                DialogInvite()
-                // mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
-            } else {
-                mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
+
+                mDatabase.child(user!!.uid).child("CoupleRoom").setValue(uid)
                 sendMessage()
-            }
+
         }
 
         fun toast_n() {

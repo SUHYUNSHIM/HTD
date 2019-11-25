@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.item_datecell.*
@@ -24,24 +25,17 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     var mMonth: Int = 0
     var mYear: Int = 0
     //firebase database
-    var Invited:Boolean?= false
+    var Invited:Boolean?= null
     var roomName:String? = null
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
     val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
-    val userListener = object: ValueEventListener{
-        override fun onCancelled(p0: DatabaseError) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+    val uid = user!!.uid
 
-        override fun onDataChange(datasnapshot: DataSnapshot) {
-            Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
-            roomName = datasnapshot.child("CoupleRoom").getValue(String::class.java)
-        }
-    }
 
-    val mReference = mDatabase.child(user!!.uid)
-    val userReference = userDatabase.child(user!!.uid)
+
+  //  var mReference:DatabaseReference = mDatabase.child(roomName!!)
+    val userReference = userDatabase.child(uid)
 
     init {
         baseCalendar.initBaseCalendar {
@@ -62,26 +56,37 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolderHelper, position: Int) {
-        val Listener = object : ValueEventListener {
+        val userListener = object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
-                    if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
-                        for (monthSnapshot in yearSnapshot.children) {
-                            if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(
-                                    Calendar.MONTH
-                                )
-                            ) {
-                                for (daySnapshot in monthSnapshot.children) {
-                                    if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
-                                        if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
-                                            //흑백 제외
-                                        } else {
-                                            holder.bt_emptydate.setSelected(true)
-                                            holder.bt_emptydate.setPressed(true)
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+                roomName = datasnapshot.child("CoupleRoom").getValue(String::class.java)
+                val mReference = mDatabase.child(roomName!!)
+                val Listener = object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
+                            if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
+                                for (monthSnapshot in yearSnapshot.children) {
+                                    if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(
+                                            Calendar.MONTH
+                                        )
+                                    ) {
+                                        for (daySnapshot in monthSnapshot.children) {
+                                            if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
+                                                if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
+                                                    //흑백 제외
+                                                } else {
+                                                    holder.bt_emptydate.setSelected(true)
+                                                    holder.bt_emptydate.setPressed(true)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -89,10 +94,12 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                         }
                     }
                 }
+                mReference.addValueEventListener(Listener)
             }
         }
-        mReference.addValueEventListener(Listener)
-        userReference.addValueEventListener((userListener))
+
+
+        userReference.addValueEventListener(userListener)
         // if (baseCalendar.data[position].toInt() == fDate
         //   && baseCalendar.calendar.get(Calendar.MONTH) == fMonth-1
         // && baseCalendar.calendar.get(Calendar.YEAR) == fYear){
@@ -176,11 +183,11 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     ) {
         if (Invited == true) {
             val User = CoupleData(maleHeart =false)
-            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         } else{
             val User = CoupleData(femaleHeart = false)
-            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         }
     }
