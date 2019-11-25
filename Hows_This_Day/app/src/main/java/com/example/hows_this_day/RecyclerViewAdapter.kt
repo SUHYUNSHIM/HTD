@@ -85,9 +85,25 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                 } else {
                                                     val heartBoolean = daySnapshot.getValue(CoupleData::class.java)
                                                     heartBoolean?.let{
-                                                        val maleHeart = it.maleHeart
-                                                        val femaleHeart = it.femaleHeart
-
+                                                        val MH = it.maleHeart
+                                                        val FH = it.femaleHeart
+                                                            if (MH == true && FH == true){
+                                                                //둘다 선택
+                                                                holder.bt_emptydate.setSelected(true)
+                                                                holder.bt_emptydate.setPressed(true)
+                                                            } else if (MH == false && FH == true){
+                                                                // 여자 선택
+                                                                holder.bt_emptydate.setSelected(false)
+                                                                holder.bt_emptydate.setPressed(true)
+                                                            } else if (MH == true && FH == false){
+                                                                // 남자 선택
+                                                                holder.bt_emptydate.setSelected(true)
+                                                                holder.bt_emptydate.setPressed(false)
+                                                            } else if (MH == false && FH == false){
+                                                                //선택 x
+                                                                holder.bt_emptydate.setSelected(false)
+                                                                holder.bt_emptydate.setPressed(false)
+                                                            }
                                                     }
                                                 }
                                             }
@@ -121,10 +137,19 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 mYear = baseCalendar.calendar.get(Calendar.YEAR)
                 Log.d("HeartClick", mDate.toString())
                 Log.d("HeartClick2", mMonth.toString())
-                if (holder.bt_emptydate.isSelected == true) {
-                    databaseDelete(mYear, mMonth, mDate)
-                } else {
-                    databaseUpdate(mYear, mMonth, mDate)
+                if (Invited == true) {
+                    if (holder.bt_emptydate.isSelected == true) {
+                        databaseDelete(mYear, mMonth, mDate)
+                    } else {
+                        databaseUpdate(mYear, mMonth, mDate)
+                    }
+                } else{
+                    if (holder.bt_emptydate.isPressed == true){
+                        databaseDelete(mYear,mMonth,mDate)
+                    } else{
+                        databaseUpdate(mYear, mMonth, mDate)
+                    }
+
                 }
             }
         }
