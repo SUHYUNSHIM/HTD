@@ -73,13 +73,16 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
                             if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
+                                val Year = yearSnapshot.key!!.toInt()
                                 for (monthSnapshot in yearSnapshot.children) {
                                     if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(
                                             Calendar.MONTH
                                         )
                                     ) {
+                                        val Month = monthSnapshot.key!!.toInt() -1
                                         for (daySnapshot in monthSnapshot.children) {
                                             if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
+                                                val Day = daySnapshot.key!!.toInt()
                                                 if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
                                                     //흑백 제외
                                                 } else {
@@ -139,12 +142,21 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 Log.d("HeartClick2", mMonth.toString())
                 if (Invited == true) {
                     if (holder.bt_emptydate.isSelected == true) {
+                        if( holder.bt_emptydate.isPressed == false) {
+                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                                .setValue(null)
+                        }
                         databaseDelete(mYear, mMonth, mDate)
                     } else {
                         databaseUpdate(mYear, mMonth, mDate)
                     }
                 } else{
                     if (holder.bt_emptydate.isPressed == true){
+                        if (holder.bt_emptydate.isSelected == false){
+                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                                .setValue(null)
+
+                        }
                         databaseDelete(mYear,mMonth,mDate)
                     } else{
                         databaseUpdate(mYear, mMonth, mDate)
