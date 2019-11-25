@@ -25,6 +25,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     var mYear: Int = 0
     //firebase database
     var Invited:Boolean?= false
+    var roomName:String? = null
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
     val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
@@ -35,6 +36,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
 
         override fun onDataChange(datasnapshot: DataSnapshot) {
             Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+            roomName = datasnapshot.child("CoupleRoom").getValue(String::class.java)
         }
     }
 
@@ -173,11 +175,11 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     ) {
         if (Invited == true) {
             val User = CoupleData(maleHeart =false)
-            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         } else{
             val User = CoupleData(femaleHeart = false)
-            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         }
     }
