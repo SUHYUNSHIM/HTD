@@ -92,6 +92,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
             }
         }
         mReference.addValueEventListener(Listener)
+        userReference.addValueEventListener((userListener))
         // if (baseCalendar.data[position].toInt() == fDate
         //   && baseCalendar.calendar.get(Calendar.MONTH) == fMonth-1
         // && baseCalendar.calendar.get(Calendar.YEAR) == fYear){
@@ -158,11 +159,11 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
 
         if (Invited == true) {
             val User = CoupleData(maleHeart = true)
-            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         } else {
             val User = CoupleData(femaleHeart = true)
-            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
                 .setValue(User)
         }
 
