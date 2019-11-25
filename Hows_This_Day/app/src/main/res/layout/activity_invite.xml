@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InviteActivity">
+    tools:context=".InviteActivity"
+    android:background= "#f7cac9">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView_logo"
+            android:layout_width="157dp"
+            android:layout_height="157dp"
+            android:layout_marginStart="120dp"
+            android:layout_marginTop="200dp"
+            app:srcCompat="@drawable/calendar_logo" />
+
+        <LinearLayout
+            android:layout_width="500dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="@dimen/appbar_padding"
+            android:orientation="vertical"
+            android:paddingLeft="150dp"
+            android:paddingTop="@dimen/appbar_padding">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="50dp"
+                android:text="연인초대하기"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="248dp"
+                android:text="이미초대 되셨나요?"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@id/button3" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
