@@ -73,13 +73,16 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
                             if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
+                                val Year = yearSnapshot.key!!.toInt()
                                 for (monthSnapshot in yearSnapshot.children) {
                                     if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(
                                             Calendar.MONTH
                                         )
                                     ) {
+                                        val Month = monthSnapshot.key!!.toInt() -1
                                         for (daySnapshot in monthSnapshot.children) {
                                             if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
+                                                val Day = daySnapshot.key!!.toInt()
                                                 if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
                                                     //흑백 제외
                                                 } else {
@@ -103,6 +106,8 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                                 //선택 x
                                                                 holder.bt_emptydate.setSelected(false)
                                                                 holder.bt_emptydate.setPressed(false)
+                                                                mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
+                                                                    .setValue(null)
                                                             }
                                                     }
                                                 }
