@@ -136,6 +136,7 @@ class DateCountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_datecount)
 
         //custom font
+        //font 바꾸는 부분을 구조화할 필요가 있다.ㅎㅎ
         val tv_first_date = findViewById(R.id.tv_firstdate) as TextView?
         tv_first_date?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_regular.ttf")
         val tv_your_birthday = findViewById(R.id.tv_yourbirthday) as TextView?
