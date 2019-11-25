@@ -24,10 +24,22 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     var mMonth: Int = 0
     var mYear: Int = 0
     //firebase database
-
-    val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
+    var Invited:Boolean?= false
+    val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
+    val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
-    val Reference = mDatabase.child(user!!.uid)
+    val userListener = object: ValueEventListener{
+        override fun onCancelled(p0: DatabaseError) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onDataChange(datasnapshot: DataSnapshot) {
+            Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+        }
+    }
+
+    val mReference = mDatabase.child(user!!.uid)
+    val userReference = userDatabase.child(user!!.uid)
 
     init {
         baseCalendar.initBaseCalendar {
@@ -77,7 +89,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 }
             }
         }
-        Reference.addValueEventListener(Listener)
+        mReference.addValueEventListener(Listener)
         // if (baseCalendar.data[position].toInt() == fDate
         //   && baseCalendar.calendar.get(Calendar.MONTH) == fMonth-1
         // && baseCalendar.calendar.get(Calendar.YEAR) == fYear){
@@ -141,8 +153,17 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
         Month: Int,
         Day: Int
     ) {
-        val User = CoupleData(false)
-        mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(User)
+
+        if (Invited == true) {
+            val User = CoupleData(maleHeart = true)
+            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+                .setValue(User)
+        } else {
+            val User = CoupleData(femaleHeart = true)
+            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+                .setValue(User)
+        }
+
     }
 
     fun databaseDelete(
@@ -150,7 +171,15 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
         Month: Int,
         Day: Int
     ) {
-        mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day").setValue(null)
+        if (Invited == true) {
+            val User = CoupleData(maleHeart =false)
+            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+                .setValue(User)
+        } else{
+            val User = CoupleData(femaleHeart = false)
+            mDatabase.child(user!!.uid).child("CalendarData").child("$Year/$Month/$Day")
+                .setValue(User)
+        }
     }
 
 
