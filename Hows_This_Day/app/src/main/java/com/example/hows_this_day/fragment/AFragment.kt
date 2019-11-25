@@ -23,26 +23,33 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.hows_this_day.CalendarData
 import com.example.hows_this_day.DateCountActivity
 import com.example.hows_this_day.ImagePickerActivity
 import com.example.hows_this_day.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import kotlinx.android.synthetic.main.fragment_a.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.IOException
 import java.util.*
 
 
-class AFragment : Fragment()  {
+class AFragment : Fragment() {
 
     internal var imgProfile: ImageView? = null
 
-   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-       return inflater.inflate(R.layout.fragment_a, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_a, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -51,16 +58,14 @@ class AFragment : Fragment()  {
         //뷰 설정g
         tvFragmentMain
         onProflieClick()
-        getDday(DateCountActivity().sYear, DateCountActivity().sMonth, DateCountActivity().sDay)
-
+        getDday()
     }
-
 
 
     private fun loadProfile(url: String) {
         Log.d(TAG, "Image cache path: $url")
 
-        imgProfile = getView()?.findViewById(R.id.my_image)
+        imgProfile = view?.findViewById(R.id.my_image)
         imgProfile?.let { Glide.with(this).load(url).into(it) }
         imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
 
@@ -68,10 +73,13 @@ class AFragment : Fragment()  {
     }
 
     private fun onProflieClick() {
-        val my_btn : Button? = getView()?.findViewById(R.id.btn_my_UploadPicture)
+        val my_btn: Button? = view?.findViewById(R.id.btn_my_UploadPicture)
         my_btn?.setOnClickListener {
-            Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Dexter.withActivity(activity)
+                .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                         if (report.areAllPermissionsGranted()) {
@@ -107,7 +115,7 @@ class AFragment : Fragment()  {
     }
 
     private fun launchCameraIntent() {
-        val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+        val intent = Intent(activity, ImagePickerActivity::class.java)
         intent.putExtra(
             ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION,
             ImagePickerActivity.REQUEST_IMAGE_CAPTURE
@@ -127,7 +135,7 @@ class AFragment : Fragment()  {
     }
 
     private fun launchGalleryIntent() {
-        val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+        val intent = Intent(activity, ImagePickerActivity::class.java)
         intent.putExtra(
             ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION,
             ImagePickerActivity.REQUEST_GALLERY_IMAGE
@@ -147,7 +155,7 @@ class AFragment : Fragment()  {
                 val uri = data?.getParcelableExtra<Uri>("path")
                 try {
                     // You can update this bitmap to your server
-                    MediaStore.Images.Media.getBitmap(getActivity()?.getContentResolver(), uri)
+                    MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
 
                     // loading profile image from local cache
                     loadProfile(uri!!.toString())
@@ -182,7 +190,7 @@ class AFragment : Fragment()  {
     // navigating user to app settings
     private fun openSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        val uri = Uri.fromParts("package", getActivity()?.getPackageName(), null)
+        val uri = Uri.fromParts("package", activity?.packageName, null)
         intent.data = uri
         startActivityForResult(intent, 101)
     }
@@ -193,23 +201,46 @@ class AFragment : Fragment()  {
     }
 
     // Fragment에서 getActivity()와 getContext()가 null을 반환하여 만드는 코드 부분
-    lateinit var mContext : Context
-    override fun onAttach(context : Context) {
+    lateinit var mContext: Context
+
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
 
     // 사귀기 시작한 날짜로부터 D+Day
-    private fun getDday (year : Int, month : Int, dayOfMonth : Int) {
-        val ddayCalendar = Calendar.getInstance()
-        ddayCalendar.set(year, month, dayOfMonth)
+    private fun getDday() {
+        // 파이어베이스에 있는 날짜 가져오기
+        var sDay: Int? = 0
+        var sMonth: Int? = 0
+        var sYear: Int? = 0
+        val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
+        val user = FirebaseAuth.getInstance().currentUser
+        val postReference = mDatabase.child(user!!.uid)
+        val postListener = object : ValueEventListener {
 
-        // Millisecond 형태의 하루(24시간)
-        val oneDay = 20 * 60 * 60 * 1000
-        val dday = ddayCalendar.timeInMillis / oneDay
-        val today = Calendar.getInstance().timeInMillis / oneDay
-        var dday_from_today = (dday - today) * -1
+            override fun onCancelled(p0: DatabaseError) { }
 
-        print(dday_from_today)
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                val Start = datasnapshot.child("StartDay").getValue(CalendarData::class.java)
+                Start?.let {
+                    sDay = it.Day
+                    sMonth = it.Month
+                    sYear = it.Year
+                }
+
+                val ddayCalendar = Calendar.getInstance()
+                sYear?.let { sMonth?.let { it1 -> sDay?.let { it2 -> ddayCalendar.set(it, it1, it2) } } }
+
+                // Millisecond 형태의 하루(24시간)
+                val oneDay: Long = 24 * 60 * 60 * 1000
+                val dday = ddayCalendar.getTimeInMillis() / oneDay
+                val today = Calendar.getInstance().getTimeInMillis() / oneDay
+                val dday_from_today : Long = (dday - today) + 1
+
+                d_day.setText(String.format("D+%d", dday_from_today))
+            }
+        }
+        postReference.addValueEventListener(postListener)
     }
 }

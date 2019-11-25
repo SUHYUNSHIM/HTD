@@ -271,7 +271,7 @@ class DateCountActivity : AppCompatActivity() {
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener1, mYear, mMonth, mDay).show()
                 } else {
-                    DatePickerDialog(this, mDateSetListener1, sYear, sMonth, sDay).show()
+                    DatePickerDialog(this, mDateSetListener1, sYear, sMonth-1, sDay).show()
                 }
                 //     bt_emptyheart.setSelected(true)
             }
@@ -285,7 +285,7 @@ class DateCountActivity : AppCompatActivity() {
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener2, mYear, mMonth, mDay).show()
                 } else {
-                    DatePickerDialog(this, mDateSetListener2, bYear, bMonth, bDay).show()
+                    DatePickerDialog(this, mDateSetListener2, bYear, bMonth -1, bDay).show()
                 }
                 //   bt_emptyheart2.setSelected(true)
 
@@ -299,7 +299,7 @@ class DateCountActivity : AppCompatActivity() {
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener3, mYear, mMonth, mDay).show()
                 } else {
-                    DatePickerDialog(this, mDateSetListener3, yYear, yMonth, yDay).show()
+                    DatePickerDialog(this, mDateSetListener3, yYear, yMonth -1, yDay).show()
                 }
             }
 

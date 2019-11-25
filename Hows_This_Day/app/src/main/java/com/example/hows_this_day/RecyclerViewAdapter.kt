@@ -83,8 +83,12 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                 if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
                                                     //흑백 제외
                                                 } else {
-                                                    holder.bt_emptydate.setSelected(true)
-                                                    holder.bt_emptydate.setPressed(true)
+                                                    val heartBoolean = daySnapshot.getValue(CoupleData::class.java)
+                                                    heartBoolean?.let{
+                                                        val maleHeart = it.maleHeart
+                                                        val femaleHeart = it.femaleHeart
+
+                                                    }
                                                 }
                                             }
                                         }
