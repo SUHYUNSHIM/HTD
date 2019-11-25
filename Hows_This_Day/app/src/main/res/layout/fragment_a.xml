@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="✿ Our Profile ✿"
+            android:fontFamily="@fonts/netmarble_light"
             android:textColor="#F7CAC9"
             android:background="@color/colorAccent"
             android:layout_marginTop="80dp"
@@ -31,6 +32,7 @@
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
@@ -38,7 +40,6 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:background="@color/colorAccent"
                 app:srcCompat="@drawable/my_profile"
@@ -58,7 +59,6 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:background="@color/colorAccent"
                 app:srcCompat="@drawable/lover_profile"
@@ -69,8 +69,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <Button
@@ -79,7 +80,6 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:background="@color/colorAccent"
-                android:layout_margin="5dp"
                 android:onClick="onClick"
                 android:text="사진 선택"
                 android:textSize="10sp" />
@@ -94,6 +94,7 @@
                 android:onClick="onClick"
                 android:text="사진 선택"
                 android:textSize="10sp" />
+
         </LinearLayout>
 
         <TextView
