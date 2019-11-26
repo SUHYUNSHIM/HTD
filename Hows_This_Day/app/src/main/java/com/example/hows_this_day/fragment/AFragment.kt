@@ -40,11 +40,7 @@ class AFragment : Fragment() {
 
     internal var imgProfile: ImageView? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_a, container, false)
     }
 
@@ -64,8 +60,6 @@ class AFragment : Fragment() {
         imgProfile = view?.findViewById(R.id.my_image)
         imgProfile?.let { Glide.with(this).load(url).into(it) }
         imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
-
-
     }
 
     private fun onProflieClick() {
@@ -234,6 +228,7 @@ class AFragment : Fragment() {
                 val today = Calendar.getInstance().getTimeInMillis() / oneDay
                 val dday_from_today : Long = (today - dday) + 1
 
+                start_day?.setText(String.format("❝ %d년 %d월 %d일 ❞", sYear, sMonth, sDay))
                 d_day?.setText(String.format("D+%d", dday_from_today))
             }
         }

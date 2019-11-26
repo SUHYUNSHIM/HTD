@@ -100,13 +100,22 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/start_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:gravity="center_horizontal"
-            android:text="❝ D+day ❞"
             android:textColor="@color/colorAccent"
             android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="우리가 만난지"
+            android:textColor="@color/colorAccent"
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/d_day"
