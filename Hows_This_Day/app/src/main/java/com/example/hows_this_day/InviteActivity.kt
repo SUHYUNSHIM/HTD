@@ -6,27 +6,37 @@ import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_invite.*
 
 class InviteActivity : AppCompatActivity() {
 
     lateinit var name: String
+    var RoomName:String? = null
     private var coupleRoom: String? = null
     //나는 초대를 보냈었다.
-    private var Invited:Boolean? = false
-    private var nameRoom:String? = null
+    private var Invited:Boolean? = null
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
     val roomDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user!!.uid
     val postReference = mDatabase.child(uid)
+    val Listener = object:ValueEventListener{
+        override fun onCancelled(p0: DatabaseError) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onDataChange(datasnapshot: DataSnapshot) {
+            coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
+            Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +116,7 @@ class InviteActivity : AppCompatActivity() {
 
     }
 
-    fun sendMessage() {
+    fun sendMessage(RName: String) {
 
         val emailIntent = Intent(Intent.ACTION_SEND)
 
@@ -118,7 +128,7 @@ class InviteActivity : AppCompatActivity() {
             if (emailIntent.resolveActivity(packageManager) != null) {
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n  $uid 를 복사해 주세요")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n  $RName 를 복사해 주세요")
             }
             startActivity(emailIntent)
 
@@ -128,7 +138,7 @@ class InviteActivity : AppCompatActivity() {
             emailIntent.type = "text/html"
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$uid 를 복사해 주세요")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$RName 를 복사해 주세요")
             startActivity(Intent.createChooser(emailIntent, "Send Email"))
         }
 
@@ -242,13 +252,46 @@ class InviteActivity : AppCompatActivity() {
         dialog.setTitle("방제 전달")
             .setMessage("방제를 상대에게 전하시겠습니까?")
 
+        val editText:EditText = EditText(this)
+
+
+
+        val editListener:DialogInterface.OnKeyListener = object : DialogInterface.OnKeyListener {
+            override fun onKey(Dialog: DialogInterface?, num: Int, event: KeyEvent?): Boolean {
+                //event? event!!
+                if (event?.action == KeyEvent.KEYCODE_ENTER) {
+                    var  RoomName = editText.getText().toString()
+                    Toast.makeText(this@InviteActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
+                    RoomName = editText.getText().toString()
+                    if (RoomName == "") {
+                        Toast.makeText(this@InviteActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                        DialogInvite()
+                        //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+                    } else {
+                        mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
+                        sendMessage("$RoomName")
+                    }
+                    return true
+                }
+                return false
+            }
+        }
+        dialog.setOnKeyListener(editListener)
+        dialog.setView(editText)
         fun toast_p() {
             //입력
-
-            mDatabase.child(user!!.uid).child("CoupleRoom").setValue(uid)
-            sendMessage()
+            var  RoomName = editText.getText().toString()
+            if (RoomName == null) {
+                Toast.makeText(this@InviteActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                DialogInvite()
+                //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
+            } else {
+                mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
+                sendMessage("$RoomName")
+            }
 
         }
+
 
         fun toast_n() {
             //cancel
@@ -267,6 +310,7 @@ class InviteActivity : AppCompatActivity() {
         dialog.setPositiveButton("입력", dialog_listener)
             .setNegativeButton("취소", dialog_listener)
             .show()
+
 
     }
 
