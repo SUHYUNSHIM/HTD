@@ -27,6 +27,7 @@ class DateCountActivity : AppCompatActivity() {
     private var coupleRoom: String? = null
     //나는 초대를 보냈었다.
     private var Invited:Boolean? = false
+    private var nameRoom:String? = null
    // private var coupleName: String? = null
     var mYear: Int = 0
     var mMonth: Int = 0
@@ -44,49 +45,65 @@ class DateCountActivity : AppCompatActivity() {
     var yMonth: Int = 0
     var yYear: Int = 0
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
+    val roomDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user!!.uid
+    val postReference = mDatabase.child(uid)
     internal var mTxtDate1: TextView? = null
     internal var mTxtDate2: TextView? = null
     internal var mTxtDate3: TextView? = null
-    var postReference = mDatabase.child(user!!.uid)
-    val postListener = object : ValueEventListener {
-        override fun onCancelled(p0: DatabaseError) {
 
+    val BigListener = object:ValueEventListener {
+        override fun onCancelled(p0: DatabaseError) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
         override fun onDataChange(datasnapshot: DataSnapshot) {
-            val Start = datasnapshot.child("StartDay").getValue(CalendarData::class.java)
-            Start?.let {
-                sDay = it.Day
-                sMonth = it.Month
-                sYear = it.Year
-                UpdateNow1()
-                heartSelected1()
-            }
-            val Birth = datasnapshot.child("BirthDay").getValue(CalendarData::class.java)
-            Birth?.let {
-                bDay = it.Day
-                bMonth = it.Month
-                bYear = it.Year
-                UpdateNow2()
-                heartSelected2()
-                Log.d("BirthDay is", "$bYear/$bMonth/$bDay")
-            }
-            val Your = datasnapshot.child("YourDay").getValue(CalendarData::class.java)
-            Your?.let {
-                yDay = it.Day
-                yMonth = it.Month
-                yYear = it.Year
-                UpdateNow3()
-                heartSelecte3()
+
+
+            val postListener = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onDataChange(datasnapshot: DataSnapshot) {
+                    val Start = datasnapshot.child("StartDay").getValue(CalendarData::class.java)
+                    Start?.let {
+                        sDay = it.Day
+                        sMonth = it.Month
+                        sYear = it.Year
+                        UpdateNow1()
+                        heartSelected1()
+                    }
+                    val Birth = datasnapshot.child("BirthDay").getValue(CalendarData::class.java)
+                    Birth?.let {
+                        bDay = it.Day
+                        bMonth = it.Month
+                        bYear = it.Year
+                        UpdateNow2()
+                        heartSelected2()
+                        Log.d("BirthDay is", "$bYear/$bMonth/$bDay")
+                    }
+                    val Your = datasnapshot.child("YourDay").getValue(CalendarData::class.java)
+                    Your?.let {
+                        yDay = it.Day
+                        yMonth = it.Month
+                        yYear = it.Year
+                        UpdateNow3()
+                        heartSelecte3()
+                    }
+                }
             }
             coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
             Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+            val roomReference = coupleRoom?.let{roomDatabase.child(it!!)}
+            roomReference?.addValueEventListener(postListener)
 
         }
-    }
 
+
+
+    }
 
     //날짜 대화상자 리스너 부분
     internal var mDateSetListener1: DatePickerDialog.OnDateSetListener =
@@ -245,7 +262,7 @@ class DateCountActivity : AppCompatActivity() {
         mMonth = cal.get(Calendar.MONTH)
         mDay = cal.get(Calendar.DAY_OF_MONTH)
 
-        postReference.addValueEventListener(postListener)
+        postReference.addValueEventListener(BigListener)
         UpdateNow1()//화면에 텍스트뷰에 업데이트 해줌.
         UpdateNow2()
         UpdateNow3()
@@ -376,8 +393,18 @@ class DateCountActivity : AppCompatActivity() {
         Month: Int,
         Day: Int
     ) {
-        val User = CalendarData(Year, Month + 1, Day)
-        mDatabase.child(uid).child(DayValue).setValue(User)
+        val roomListener  = object:ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                Log.d("OnDataChange","$nameRoom")
+                nameRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
+                val User = CalendarData(Year, Month + 1, Day)
+                nameRoom?.let{roomDatabase.child(it!!).child(DayValue).setValue(User)}
+            }
+        }
+        postReference!!.addValueEventListener(roomListener)
     }
 
     fun sendMessage() {
