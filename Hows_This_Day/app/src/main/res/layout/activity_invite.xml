@@ -19,12 +19,14 @@
             android:layout_width="157dp"
             android:layout_height="157dp"
             android:layout_marginStart="120dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="170dp"
+            android:paddingRight="10dp"
             app:srcCompat="@drawable/calendar_logo" />
 
         <LinearLayout
             android:layout_width="500dp"
             android:layout_height="300dp"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/appbar_padding"
             android:orientation="vertical"
             android:paddingLeft="150dp"
