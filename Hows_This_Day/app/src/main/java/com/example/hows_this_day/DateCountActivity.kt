@@ -20,9 +20,8 @@ import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
-
-
 class DateCountActivity : AppCompatActivity() {
+
     lateinit var name: String
     private var coupleRoom: String? = null
     //나는 초대를 보냈었다.
@@ -175,14 +174,6 @@ class DateCountActivity : AppCompatActivity() {
         }
 
 
-
-
-        if (intent.hasExtra("UserName")) {
-            date_count_username.text = intent.getStringExtra("UserName")
-            name = intent.getStringExtra("UserName")
-        } else {
-            Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
-        }
 
         //다음화면인 HTDActivity로 넘어가기 위한 버튼, intent
         val b = findViewById<View>(R.id.bt_tohtd) as Button

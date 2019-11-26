@@ -105,16 +105,7 @@
             android:ems="10"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/date_count_username"
-            android:layout_width="141dp"
-            android:layout_height="51dp"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="50dp"
-            android:paddingStart="20dp"
-            android:paddingTop="15dp"
-            android:text="TextView"
-            android:textSize="18sp" />
+
 
         <Button
             android:id="@+id/bt_tohtd"

@@ -40,7 +40,7 @@ class LoadingActivity : AppCompatActivity() {
     }
     private fun startLoading() {
         val handler = Handler()
-        val intent = Intent(baseContext, DateCountActivity::class.java)
+        val intent = Intent(baseContext, InviteActivity::class.java)
         handler.postDelayed(Runnable {
             val user = FirebaseAuth.getInstance().currentUser       //구글 계정으로 로그인된 사용자의 정보
             user?.let {
