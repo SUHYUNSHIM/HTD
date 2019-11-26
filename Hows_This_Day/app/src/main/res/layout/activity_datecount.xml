@@ -15,7 +15,8 @@
         android:layout_marginTop="88dp"
         android:paddingTop="15dp"
         android:text="하트를 눌러 아래 날짜들을 설정해 주세요"
-        app:layout_constraintStart_toEndOf="@+id/button_invite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -117,20 +118,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_invite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="초대"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_combine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="초대되심?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
