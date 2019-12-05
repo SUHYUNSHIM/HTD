@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-database:19.1.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+    implementation 'com.google.firebase:firebase-storage:18.0.0'
     // 만약 Firebase를 연동할 때 Assistant를 쓰지 않고 Gradle로 연결했다면,
     // SHA1 키를 넣어주어야 구글 로그인을 진행할 수 있다.
     // 우측 Gradle -> [Tasks] -> [android] -> [SigningReport] -> SHA1 키 발급
@@ -63,7 +64,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     implementation 'com.github.yalantis:ucrop:2.2.2'
-
 }
 
 androidExtensions {
