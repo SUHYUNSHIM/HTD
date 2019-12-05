@@ -32,11 +32,13 @@ import com.bumptech.glide.Glide
 import com.example.hows_this_day.R
 import java.io.IOException
 import android.widget.Button
+import com.google.firebase.storage.FirebaseStorage
 
 
 class CFragment : Fragment() {
 
     internal var picture: ImageView? = null
+    lateinit var firebaseStorage: FirebaseStorage
 
     var dialogItemList: MutableList<Map<String, Any>>? = null                             //날짜선택 list
     var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)   //날짜 선택 dialog에 나타날 이미지
@@ -60,6 +62,8 @@ class CFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        firebaseStorage = FirebaseStorage.getInstance()
+
         val button_run = getView()?.findViewById<View>(R.id.bt_datechooser) as Button?
         button_run?.setOnClickListener { showAlertDialog() }        //날짜 선택 다이얼로그를 호출
 
@@ -156,7 +160,9 @@ class CFragment : Fragment() {
                     MediaStore.Images.Media.getBitmap(getActivity()?.getContentResolver(), uri)
 
                     // loading profile image from local cache
-                    loadPicture(uri!!.toString())
+                    loadPicture(uri.toString())
+                    // 파이어베이스 스토리지에 저장하기
+                    uri?.let { firebaseStorage.reference.child("diaryFolder").child("diaryPicture.png").putFile(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }

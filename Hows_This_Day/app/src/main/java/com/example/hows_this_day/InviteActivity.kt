@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_invite.*
 
 class InviteActivity : AppCompatActivity() {
 
-    lateinit var name: String
+    var name: String?=null
     private var coupleRoom: String? = null   //커플룸 이름
     private var Invited:Boolean? = null      //초대를 보낸 여부에 대한 변수
 
@@ -47,6 +47,7 @@ class InviteActivity : AppCompatActivity() {
 
         if (intent.hasExtra("UserName")) {
             date_count_username.text = intent.getStringExtra("UserName")
+            name = intent.getStringExtra("UserName")
         } else {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
@@ -263,7 +264,7 @@ class InviteActivity : AppCompatActivity() {
                 //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
             } else {
                 mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
-                sendMessage("RoomName")
+                sendMessage("$RoomName")
             }
 
         }
