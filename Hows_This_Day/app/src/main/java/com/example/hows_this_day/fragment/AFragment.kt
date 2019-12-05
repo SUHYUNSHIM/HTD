@@ -215,7 +215,7 @@ class AFragment : Fragment() {
         super.onAttach(context)
         mContext = context
     }
-    
+
 
     // 사귀기 시작한 날짜로부터 D+Day
     private fun getDday() {
@@ -277,7 +277,7 @@ class AFragment : Fragment() {
                 //User에서 커플룸 이름 읽어옴
                 val roomReference = coupleRoom?.let { roomDatabase.child(it) }
                 roomReference?.addValueEventListener(postListener)
-                // User에서 커플룸 이름 불러오고, Room에 커플룸 이름으로 방을 생성 및 달력 데이터 불러옴
+                // User에서 커플룸 이름 불러오고, Room에 있는 첫날 데이터 불러옴
             }
         }
         postReference.addValueEventListener(BigListener)
