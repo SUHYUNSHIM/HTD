@@ -113,11 +113,10 @@ class InviteActivity : AppCompatActivity() {
 
         try {
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
-
             emailIntent.type = "text/html"
             emailIntent.setPackage("com.google.android.gm")
             if (emailIntent.resolveActivity(packageManager) != null) {
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("연인의 이메일을 입력해주세요"))
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n $RName 를 복사해 주세요")
             }
