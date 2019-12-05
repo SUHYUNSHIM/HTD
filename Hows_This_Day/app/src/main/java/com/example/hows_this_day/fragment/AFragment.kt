@@ -53,7 +53,7 @@ class AFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         firebaseStorage = FirebaseStorage.getInstance()
-
+        
         tvFragmentMain
         downloadInLocal()
         onProflieClick()
