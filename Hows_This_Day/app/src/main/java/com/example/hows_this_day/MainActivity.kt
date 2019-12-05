@@ -1,7 +1,7 @@
 package com.example.hows_this_day
 
 
-import android.content.Intent;
+import android.content.Intent
 import android.graphics.fonts.Font
 import android.os.Bundle;
 //import android.view.View
@@ -9,11 +9,10 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 
 
-import android.widget.Toast;
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
-//import androidx.core.app.ActivityCompat.startActivityForResult
+
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,19 +27,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import android.graphics.Typeface
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
 
-
-//import androidx.core.app.ComponentActivity
-//import androidx.core.app.ComponentActivity.ExtraData
-//import androidx.core.content.ContextCompat.getSystemService
-//import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-//import android.content.DialogInterface
 
 
 class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener {
@@ -142,21 +131,16 @@ class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListen
                     }
 
                 } else {
-                    // If sign in fails, display a message to the user.
-                    //Log.w(TAG, "signInWithCredential:failure", task.getException());
-                    // Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
-                    //          Toast.LENGTH_SHORT).show();
+                   Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     //  updateUI(null);
                     // If sign in fails, display a message to the user.
-
                 }
 
-                // ...
-            })
+           })
     }
 
     override fun onConnectionFailed(@NonNull connectionResult: ConnectionResult) {
-        FirebaseAuth.getInstance().signOut() // 로그아웃시 일단 이렇게 생겼는데, 로그아웃 버튼은 안만듬.
+        //FirebaseAuth.getInstance().signOut() 로그아웃
     }
 
     companion object {

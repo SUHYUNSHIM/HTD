@@ -56,11 +56,7 @@ class CFragment : Fragment() {
             itemMap[TAG_TEXT] = text[i]
             dialogItemList?.add(itemMap)
         }
-        //custom font
-        val tv_dialog_date = getView()?.findViewById(R.id.textview_main_text) as TextView?
-        tv_dialog_date?.typeface = Typeface.createFromAsset(getActivity()?.getAssets(), "fonts/netmarble_bold.ttf")
-        val et_diary = getView()?.findViewById(R.id.multiAutoCompleteTextView2) as MultiAutoCompleteTextView?
-        et_diary?.typeface = Typeface.createFromAsset(getActivity()?.getAssets(), "fonts/netmarble_light.ttf")
+
 
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
