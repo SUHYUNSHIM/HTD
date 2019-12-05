@@ -23,14 +23,14 @@ class BaseCalendar {
     }
 
     /**
-     * Init calendar.
+     * 달력 초기화
      */
     fun initBaseCalendar(refreshCallback: (Calendar) -> Unit) {
         makeMonthDate(refreshCallback)
     }
 
     /**
-     * Change to prev month.
+     * 이전 달로 이동
      */
     fun changeToPrevMonth(refreshCallback: (Calendar) -> Unit) {
         if(calendar.get(Calendar.MONTH) == 0){
@@ -43,7 +43,7 @@ class BaseCalendar {
     }
 
     /**
-     * Change to next month.
+     * 다음 달로 이동
      */
     fun changeToNextMonth(refreshCallback: (Calendar) -> Unit) {
         if(calendar.get(Calendar.MONTH) == Calendar.DECEMBER){
@@ -56,7 +56,7 @@ class BaseCalendar {
     }
 
     /**
-     * make month date.
+     * 며칠인지 data에 저장
      */
     private fun makeMonthDate(refreshCallback: (Calendar) -> Unit) {
 
@@ -78,7 +78,7 @@ class BaseCalendar {
     }
 
     /**
-     * Generate data for the last month displayed before the first day of the current calendar.
+     * 지금의 달에 이전달 표기
      */
     private fun makePrevMonthTail(calendar: Calendar) {
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1)
@@ -89,14 +89,14 @@ class BaseCalendar {
     }
 
     /**
-     * Generate data for the current calendar.
+     * 이번달 표기
      */
     private fun makeCurrentMonth(calendar: Calendar) {
         for (i in 1..calendar.getActualMaximum(Calendar.DATE)) data.add(i)
     }
 
     /**
-     * Generate data for the next month displayed before the last day of the current calendar.
+     * 지금의 달에 다음달 날짜 표기
      */
     private fun makeNextMonthHead() {
         var date = 1

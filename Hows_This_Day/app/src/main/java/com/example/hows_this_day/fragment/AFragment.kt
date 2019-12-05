@@ -18,13 +18,16 @@ import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.hows_this_day.CalendarData
 import com.example.hows_this_day.ImagePickerActivity
 import com.example.hows_this_day.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -32,12 +35,14 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_a.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import java.io.File
 import java.io.IOException
 import java.util.*
 
 
 class AFragment : Fragment() {
 
+    lateinit var firebaseStorage: FirebaseStorage
     internal var imgProfile: ImageView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,8 +52,10 @@ class AFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //뷰 설정g
+        firebaseStorage = FirebaseStorage.getInstance()
+        
         tvFragmentMain
+        downloadInLocal()
         onProflieClick()
         getDday()
     }
@@ -146,9 +153,10 @@ class AFragment : Fragment() {
                 try {
                     // You can update this bitmap to your server
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
-
                     // loading profile image from local cache
-                    loadProfile(uri!!.toString())
+                    loadProfile(uri.toString())
+                    // 파이어베이스 스토리지에 저장하기
+                    uri?.let { firebaseStorage.reference.child("profileFolder").child("myProfile.png").putFile(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -190,6 +198,17 @@ class AFragment : Fragment() {
         val REQUEST_IMAGE = 100
     }
 
+    // 파이어베이스 스토리지에서  이미지 가져오기
+    private fun downloadInLocal() {
+        val ref= firebaseStorage.reference.child("profileFolder").child("myProfile.png")
+        val localFile = File.createTempFile("profileFolder", "png")
+        ref.getFile(localFile)
+
+        imgProfile = view?.findViewById(R.id.my_image)
+        imgProfile?.let { Glide.with(this).load(ref).into(it) }
+        imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
+    }
+
     // Fragment에서 getActivity()와 getContext()가 null을 반환하여 만드는 코드 부분
     lateinit var mContext: Context
 
@@ -204,7 +223,7 @@ class AFragment : Fragment() {
         var sDay: Int? = 0
         var sMonth: Int? = 0
         var sYear: Int? = 0
-        val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
+        val mDatabase = FirebaseDatabase.getInstance().getReference("User")
         val user = FirebaseAuth.getInstance().currentUser
         val postReference = mDatabase.child(user!!.uid)
         val postListener = object : ValueEventListener {

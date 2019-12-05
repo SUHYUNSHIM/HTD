@@ -4,7 +4,7 @@
 
     <item
 
-        android:state_selected="true"
+        android:state_selected="false"
         android:drawable="@drawable/like">
     </item>
     <item
@@ -16,7 +16,7 @@
         android:drawable="@drawable/half_filled_g">
     </item>
     <item
-        android:state_selected="false"
+        android:state_selected="true"
         android:drawable="@drawable/redheart">
     </item>
 
