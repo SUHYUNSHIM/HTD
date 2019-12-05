@@ -18,7 +18,6 @@ import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -36,7 +35,6 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_a.*
 import kotlinx.android.synthetic.main.fragment_main.*
-import java.io.File
 import java.io.IOException
 import java.util.*
 
@@ -56,7 +54,6 @@ class AFragment : Fragment() {
         firebaseStorage = FirebaseStorage.getInstance()
 
         tvFragmentMain
-        downloadInLocal()
         onProflieClick()
         getDday()
     }
@@ -201,11 +198,20 @@ class AFragment : Fragment() {
 
     // 파이어베이스 스토리지에서  이미지 가져오기
     private fun downloadInLocal() {
-        val ref : StorageReference = FirebaseStorage.getInstance().getReference("profileFolder/myProfile.png")
+        val ref : StorageReference = FirebaseStorage.getInstance()
+            .getReference("gs://how-this-day.appspot.com/profileFolder/myProfile.png")
 
         imgProfile = view?.findViewById(R.id.my_image)
-        imgProfile?.let { Glide.with(this).load(ref).into(it) }
-        imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
+        //imgProfile?.let { Glide.with(this).load(ref).into(it) }
+        //imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
+
+        imgProfile?.let {
+            Glide.with(this)
+                .load(ref)
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(it)
+        }
     }
 
     // Fragment에서 getActivity()와 getContext()가 null을 반환하여 만드는 코드 부분
