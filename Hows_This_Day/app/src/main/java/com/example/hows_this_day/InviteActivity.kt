@@ -6,9 +6,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
@@ -18,15 +16,11 @@ import kotlinx.android.synthetic.main.activity_invite.*
 class InviteActivity : AppCompatActivity() {
 
     lateinit var name: String
-    private var coupleRoom: String? = null
-    //커플룸 이름
-    private var Invited:Boolean? = null
-    //나는 초대를 보냈었다.
-    val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
-    //User에서 레퍼런스를 가져옴
-    val user = FirebaseAuth.getInstance().currentUser
-    //유저정보를 읽어옴
+    private var coupleRoom: String? = null   //커플룸 이름
+    private var Invited:Boolean? = null      //초대를 보낸 여부에 대한 변수
 
+    val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")    //User에서 레퍼런스를 가져옴
+    val user = FirebaseAuth.getInstance().currentUser            //유저정보를 읽어옴
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +30,8 @@ class InviteActivity : AppCompatActivity() {
         //logo 애니메이션 효과
         val iv = findViewById(R.id.imageView_logo) as ImageView
         val anim2 = AnimationUtils.loadAnimation(
-            applicationContext, // 현재화면의 제어권자
-            R.anim.logo  // 애니메이션 설정 파일
+            applicationContext,     // 현재화면의 제어권자
+            R.anim.logo             // 애니메이션 설정 파일
         )
         iv.startAnimation(anim2)
 
@@ -48,31 +42,29 @@ class InviteActivity : AppCompatActivity() {
         }
 
         //custom font
-        //커스텀 폰트 적용
         val tv_font2 = findViewById(R.id.date_count_username) as TextView
         tv_font2.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
 
         if (intent.hasExtra("UserName")) {
             date_count_username.text = intent.getStringExtra("UserName")
-            name = intent.getStringExtra("UserName")
         } else {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
 
         //초대기능
         val invite = findViewById<Button>(R.id.button3)
-        invite.setOnClickListener() {
+        invite.setOnClickListener {
             DialogInvite()
         }
         //초대를 받는 기능
         val combine = findViewById<Button>(R.id.button4)
-        combine.setOnClickListener() {
+        combine.setOnClickListener{
             if (Invited == false) {
                 combineFun()
             }
             else {
                 //초대를 한 적이 있는 경우
-                var dialog = AlertDialog.Builder(this)
+                val dialog = AlertDialog.Builder(this)
                 dialog.setTitle("이미 초대하신 기록이 있습니다.")
                     .setMessage("초대한 기록을 삭제하고 메세지를 입력하시겠습니까?")
                     .setIcon(R.mipmap.ic_launcher)
@@ -87,7 +79,7 @@ class InviteActivity : AppCompatActivity() {
                     Toast.makeText(this, "방제 입력을 취소했습니다", Toast.LENGTH_SHORT).show()
                 }
 
-                var dialog_listener = object : DialogInterface.OnClickListener {
+                val dialog_listener = object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
                         when (which) {
                             DialogInterface.BUTTON_POSITIVE ->
@@ -100,11 +92,8 @@ class InviteActivity : AppCompatActivity() {
                 dialog.setPositiveButton("넹", dialog_listener)
                     .setNegativeButton("아닌데요?", dialog_listener)
                     .show()
-
             }
         }
-
-
     }
 
     fun sendMessage(RName: String) {
@@ -113,13 +102,13 @@ class InviteActivity : AppCompatActivity() {
 
         try {
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
-
             emailIntent.type = "text/html"
             emailIntent.setPackage("com.google.android.gm")
             if (emailIntent.resolveActivity(packageManager) != null) {
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("연인의 이메일을 입력해주세요"))
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n $RName 를 복사해 주세요")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n$RName 를 복사해 주세요")
+                startActivity(emailIntent)
             }
             startActivity(emailIntent)
 
@@ -128,29 +117,27 @@ class InviteActivity : AppCompatActivity() {
 
             emailIntent.type = "text/html"
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어\n$RName 를 복사해 주세요")
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 이날어때로 초대합니다.")
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "넌 나에게 모욕감을 줬어. \n$RName 를 복사해 주세요")
             startActivity(Intent.createChooser(emailIntent, "Send Email"))
         }
-
-
 
     }
 
     fun DialogCombine() {
         //받은 변수 입력하는 다이얼로그 생성
-        var dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
         dialog.setTitle("타이틀은 글쎄")
             .setMessage("받은 변수를 붙여주십시오.")
 
-        val editText: EditText = EditText(this)
+        val editText = EditText(this)
         //엔터 누르면 입력받음
         val editListener:DialogInterface.OnKeyListener = object : DialogInterface.OnKeyListener {
             override fun onKey(Dialog: DialogInterface?, num: Int, event: KeyEvent?): Boolean {
                 //event? event!!
                 if (event?.action == KeyEvent.KEYCODE_ENTER) {
                     Toast.makeText(this@InviteActivity, "입력되었습니다", Toast.LENGTH_SHORT).show()
-                    var otherName = editText.getText().toString()
+                    val otherName = editText.getText().toString()
                     if (otherName == "") {
                         Toast.makeText(this@InviteActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
                         DialogCombine()
@@ -167,7 +154,7 @@ class InviteActivity : AppCompatActivity() {
             .setView(editText)
         fun toast_p() {
             //입력
-            var otherName = editText.getText().toString()
+            val otherName = editText.getText().toString()
             if (otherName == "") {
                 Toast.makeText(this, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
                 DialogCombine()
@@ -180,8 +167,7 @@ class InviteActivity : AppCompatActivity() {
         fun toast_n() {
             //취소
         }
-
-        var dialog_listener = object : DialogInterface.OnClickListener {
+        val dialog_listener = object : DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {
                 when (which) {
                     DialogInterface.BUTTON_POSITIVE ->
@@ -205,7 +191,7 @@ class InviteActivity : AppCompatActivity() {
             //  sendMessage()
 
         } else {
-            var dialog = AlertDialog.Builder(this)
+            val dialog = AlertDialog.Builder(this)
             dialog.setTitle("초대하기")
                 .setMessage("다시 초대하시겠습니까?")
                 .setIcon(R.mipmap.ic_launcher)
@@ -220,7 +206,7 @@ class InviteActivity : AppCompatActivity() {
                 Toast.makeText(this@InviteActivity, "초대를 취소하였습니다.", Toast.LENGTH_SHORT).show()
             }
 
-            var dialog_listener = object : DialogInterface.OnClickListener {
+            val dialog_listener = object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     when (which) {
                         DialogInterface.BUTTON_POSITIVE ->
@@ -233,14 +219,12 @@ class InviteActivity : AppCompatActivity() {
             dialog.setPositiveButton("넹", dialog_listener)
                 .setNegativeButton("아닌데요?", dialog_listener)
                 .show()
-
-
         }
     }
 
     //초대 메일 보내기
     fun RoomSend(){
-        var dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
         dialog.setTitle("방제 전달")
             .setMessage("방제를 상대에게 전하시겠습니까?")
 
@@ -261,7 +245,7 @@ class InviteActivity : AppCompatActivity() {
                         //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
                     } else {
                         mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
-                        sendMessage("$RoomName")
+                        sendMessage("RoomName")
                     }
                     return true
                 }
@@ -272,14 +256,14 @@ class InviteActivity : AppCompatActivity() {
         dialog.setView(editText)
         fun toast_p() {
             //입력
-            var  RoomName = editText.getText().toString()
+            val  RoomName = editText.getText().toString()
             if (RoomName == null) {
                 Toast.makeText(this@InviteActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
                 DialogInvite()
                 //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
             } else {
                 mDatabase.child(user!!.uid).child("CoupleRoom").setValue(RoomName)
-                sendMessage("$RoomName")
+                sendMessage("RoomName")
             }
 
         }
@@ -289,7 +273,7 @@ class InviteActivity : AppCompatActivity() {
             //cancel
         }
 
-        var dialog_listener = object : DialogInterface.OnClickListener {
+        val dialog_listener = object : DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {
                 when (which) {
                     DialogInterface.BUTTON_POSITIVE ->
@@ -311,7 +295,7 @@ class InviteActivity : AppCompatActivity() {
         if (coupleRoom == null) {
             DialogCombine()
         } else {
-            var dialog = AlertDialog.Builder(this)
+            val dialog = AlertDialog.Builder(this)
             dialog.setTitle("변수입력")
                 .setMessage("다시 입력하시겠습니까?")
                 .setIcon(R.mipmap.ic_launcher)
@@ -324,7 +308,7 @@ class InviteActivity : AppCompatActivity() {
                 Toast.makeText(this@InviteActivity, "그러시든가", Toast.LENGTH_SHORT).show()
             }
 
-            var dialog_listener = object : DialogInterface.OnClickListener {
+            val dialog_listener = object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     when (which) {
                         DialogInterface.BUTTON_POSITIVE ->
@@ -337,11 +321,6 @@ class InviteActivity : AppCompatActivity() {
             dialog.setPositiveButton("넹", dialog_listener)
                 .setNegativeButton("아니요?", dialog_listener)
                 .show()
-
         }
     }
-
-    //초대와 초대 되심 버튼을 여기에 옮기기
-
-
 }
