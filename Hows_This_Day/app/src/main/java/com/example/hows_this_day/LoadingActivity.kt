@@ -16,17 +16,16 @@ class LoadingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //전체 화면 설정
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-
-
         setContentView(R.layout.activity_loading)
         startLoading()
 
         if (intent.hasExtra("UserName")) {
-            username_in_loading.text = intent.getStringExtra("UserName")
+            username_in_loading.text = intent.getStringExtra("UserName")        //textview에 사용자의 이름을 넣어줌.
         } else {
             Toast.makeText(this, "전달된 이름이 없습니다", Toast.LENGTH_SHORT).show()
         }
@@ -41,12 +40,12 @@ class LoadingActivity : AppCompatActivity() {
     private fun startLoading() {
         val handler = Handler()
         val intent = Intent(baseContext, InviteActivity::class.java)
+
         handler.postDelayed(Runnable {
-            val user = FirebaseAuth.getInstance().currentUser       //구글 계정으로 로그인된 사용자의 정보
+            val user = FirebaseAuth.getInstance().currentUser
             user?.let {
-                // Name, email address, and profile photo Url
-                val name = user.displayName
-                intent.putExtra( "UserName",name) // 넘길 intent에 extra넣겠다.
+                 val name = user.displayName
+                intent.putExtra( "UserName",name)
                 startActivityForResult(intent, 1)
                 finish()
             }

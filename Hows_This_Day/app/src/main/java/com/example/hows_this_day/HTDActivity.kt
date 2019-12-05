@@ -1,7 +1,6 @@
 package com.example.hows_this_day
 
 import android.app.TabActivity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 
