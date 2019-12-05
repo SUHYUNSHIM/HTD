@@ -360,10 +360,10 @@ class DateCountActivity : AppCompatActivity() {
                 nameRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
                 val User = CalendarData(Year, Month + 1, Day)
                 //CalendarData를 이용한 자료의 구조화
-                nameRoom?.let{roomDatabase.child(it!!).child(DayValue).setValue(User)}
+                nameRoom?.let{roomDatabase.child(it).child(DayValue).setValue(User)}
             }
         }
-        postReference!!.addValueEventListener(roomListener)
+        postReference.addValueEventListener(roomListener)
         // User에서 커플룸 이름 가져옴
     }
 
