@@ -307,7 +307,7 @@ class InviteActivity : AppCompatActivity() {
     }
 
     fun combineFun(){
-        //변수 입력하는 함수
+       //변수 입력하는 함수
         if (coupleRoom == null) {
             DialogCombine()
         } else {

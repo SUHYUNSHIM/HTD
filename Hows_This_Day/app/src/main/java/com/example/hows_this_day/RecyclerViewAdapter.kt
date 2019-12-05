@@ -32,13 +32,10 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user!!.uid
     var heartValue:Int = 0
-
-
-
-  //  var mReference:DatabaseReference = mDatabase.child(roomName!!)
     val userReference = userDatabase.child(uid)
 
     init {
+        // 날짜 초기화로 리사이클뷰 날짜 구분
         baseCalendar.initBaseCalendar {
             refreshView(it)
         }
@@ -53,13 +50,14 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
 
 
     override fun getItemCount(): Int {
+        //
         return BaseCalendar.LOW_OF_CALENDAR * BaseCalendar.DAYS_OF_WEEK
     }
 
     override fun onBindViewHolder(holder: ViewHolderHelper, position: Int) {
         val userListener = object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+               //데이터 읽어오지 못함
             }
 
             override fun onDataChange(datasnapshot: DataSnapshot) {
@@ -72,6 +70,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                     }
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        // 연/월/일 로 키값을 읽고 거기에 있는 값을 읽어온다.
                         for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
                             if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
                                 val Year = yearSnapshot.key!!.toInt()
@@ -96,10 +95,12 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                                 holder.bt_emptydate.setSelected(false)
                                                             } else if (heartInt == 1){
                                                                 // 여자 선택
+                                                                holder.bt_emptydate.setSelected(true)
                                                                 holder.bt_emptydate.setActivated(true)
                                                             } else if (heartInt ==2){
                                                                 Log.d("데이터 읽기 222", heartInt.toString())
                                                                 // 남자 선택
+                                                                holder.bt_emptydate.setSelected(true)
                                                                 holder.bt_emptydate.setActivated(true)
                                                             } else if (heartInt == 3){
                                                                 //풀 하트
@@ -118,19 +119,11 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 mReference?.addValueEventListener(Listener)
             }
         }
-
-
         userReference.addValueEventListener(userListener)
-        // if (baseCalendar.data[position].toInt() == fDate
-        //   && baseCalendar.calendar.get(Calendar.MONTH) == fMonth-1
-        // && baseCalendar.calendar.get(Calendar.YEAR) == fYear){
-        //holder.bt_emptyheart_frg.setSelected(true)
-
-        //}
 
         holder.bt_emptydate.setOnClickListener() {
             if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
-
+                //만약 이번달의 리사이클뷰라 아니라면 클릭이벤트를 무시한다.
             } else {
                 //달력정보 데이터베이스 업데이트
                 mDate = baseCalendar.data[position]

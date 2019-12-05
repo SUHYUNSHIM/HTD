@@ -105,7 +105,7 @@ class DateCountActivity : AppCompatActivity() {
             //User에서 커플룸 이름 읽어옴
             Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
             //User에서 초대여부 읽어옴
-            val roomReference = coupleRoom?.let{roomDatabase.child(it!!)}
+            val roomReference = coupleRoom?.let{roomDatabase.child(it)}
             roomReference?.addValueEventListener(postListener)
             // User에서 커플룸 이름 불러오고, Room에 커플룸 이름으로 방을 생성 및 달력 데이터 불러옴
         }
@@ -360,10 +360,10 @@ class DateCountActivity : AppCompatActivity() {
                 nameRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
                 val User = CalendarData(Year, Month + 1, Day)
                 //CalendarData를 이용한 자료의 구조화
-                nameRoom?.let{roomDatabase.child(it!!).child(DayValue).setValue(User)}
+                nameRoom?.let{roomDatabase.child(it).child(DayValue).setValue(User)}
             }
         }
-        postReference!!.addValueEventListener(roomListener)
+        postReference.addValueEventListener(roomListener)
         // User에서 커플룸 이름 가져옴
     }
 
