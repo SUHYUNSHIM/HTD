@@ -29,7 +29,7 @@ import android.widget.TextView
 
 class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListener {
     private var mGoogleApiClient: GoogleApiClient? = null
-    private var mAuth: FirebaseAuth? = null     //firebsae authentication
+    private var mAuth: FirebaseAuth? = null     //firebsae authentication 객체
 
     public override fun onStart() {
         super.onStart()
@@ -40,8 +40,10 @@ class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mAuth = FirebaseAuth.getInstance()
+        mAuth = FirebaseAuth.getInstance()      // 파이어베이스 인증 객체 선언
+
         // Google 로그인 확인한다.
+        // GoogleSignInOptions 개체를 구성할 때 requestIdToken을 호출
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -79,16 +81,19 @@ class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListen
     override fun  onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // 구글로그인 버튼 응답
+        // GoogleSignInApi.getSignInIntent(...)로부터의 런칭 인텐트에 대한 결과
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) { //구글버튼 로그인 누르고, 구글사용자 확인되면 실행되는 로직
+            if (result.isSuccess) {
+                //구글버튼 로그인 누르고, 구글사용자 확인되면 실행되는 로직
                 //구글 로그인이 성공적이라면, firebase로 로그인 인증이 완료.
                 // Google Sign In was successful, authenticate with Firebase
                 val account = result.signInAccount
                 firebaseAuthWithGoogle(account!!) //구글이용자 확인된 사람정보 파이어베이스로 넘기기
             }
             else {
+
             }
         }
     }
@@ -125,7 +130,10 @@ class MainActivity :AppCompatActivity(),GoogleApiClient.OnConnectionFailedListen
     }
 
     companion object {
-        private const val RC_SIGN_IN = 10       //const val 는 컴파일 시간에 결정되는 상수
-                                                    //클래스의 프로퍼티나 지역변수로 할당 할 수 없음.
+        private const val RC_SIGN_IN = 10
+        // 구글로그인 result 상수
+        //const val 는 컴파일 시간에 결정되는 상수
+        //클래스의 프로퍼티나 지역변수로 할당 할 수 없음.
+        //구글로그인 버튼을 클릭하여 startactivityforresult 응답 코드로 사용합니다.
     }
 }

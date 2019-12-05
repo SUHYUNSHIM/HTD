@@ -18,13 +18,17 @@ import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.hows_this_day.CalendarData
 import com.example.hows_this_day.ImagePickerActivity
 import com.example.hows_this_day.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -32,12 +36,14 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_a.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import java.io.File
 import java.io.IOException
 import java.util.*
 
 
 class AFragment : Fragment() {
 
+    lateinit var firebaseStorage: FirebaseStorage
     internal var imgProfile: ImageView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,8 +52,11 @@ class AFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //뷰 설정g
+
+        firebaseStorage = FirebaseStorage.getInstance()
+
         tvFragmentMain
+        downloadInLocal()
         onProflieClick()
         getDday()
     }
@@ -145,9 +154,10 @@ class AFragment : Fragment() {
                 try {
                     // You can update this bitmap to your server
                     MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
-
                     // loading profile image from local cache
-                    loadProfile(uri!!.toString())
+                    loadProfile(uri.toString())
+                    // 파이어베이스 스토리지에 저장하기
+                    uri?.let { firebaseStorage.reference.child("profileFolder").child("myProfile.png").putFile(it) }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -189,6 +199,15 @@ class AFragment : Fragment() {
         val REQUEST_IMAGE = 100
     }
 
+    // 파이어베이스 스토리지에서  이미지 가져오기
+    private fun downloadInLocal() {
+        val ref : StorageReference = FirebaseStorage.getInstance().getReference("profileFolder/myProfile.png")
+
+        imgProfile = view?.findViewById(R.id.my_image)
+        imgProfile?.let { Glide.with(this).load(ref).into(it) }
+        imgProfile?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
+    }
+
     // Fragment에서 getActivity()와 getContext()가 null을 반환하여 만드는 코드 부분
     lateinit var mContext: Context
 
@@ -198,70 +217,7 @@ class AFragment : Fragment() {
     }
 
     // 사귀기 시작한 날짜로부터 D+Day
-    private fun getDday() {
-        // 파이어베이스에 있는 날짜 가져오기
-        var sDay: Int? = 0
-        var sMonth: Int? = 0
-        var sYear: Int? = 0
-        val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
-        val roomDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
-        val user = FirebaseAuth.getInstance().currentUser
-        val postReference = mDatabase.child(user!!.uid)
-        val BigListener = object : ValueEventListener {
-            //User에서 데이터 불러옴
-            override fun onCancelled(p0: DatabaseError) {
-                //데이터 불러오기 실패
-            }
 
-            override fun onDataChange(datasnapshot: DataSnapshot) {
-                //데이터 변화를 감지했을 때
-                val postListener = object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
 
-                    }
 
-                    override fun onDataChange(datasnapshot: DataSnapshot) {
-                        val Start =
-                            datasnapshot.child("StartDay").getValue(CalendarData::class.java)
-                        Start?.let {
-                            Log.d("데이데이",sDay.toString())
-                            sDay = it.Day
-                            sMonth = it.Month
-                            sYear = it.Year
-                        }
-
-                        val ddayCalendar = Calendar.getInstance()
-                        sYear?.let {
-                            sMonth?.let { it1 ->
-                                sDay?.let { it2 ->
-                                    ddayCalendar.set(
-                                        it,
-                                        it1 - 1,
-                                        it2
-                                    )
-                                }
-                            }
-                        }
-
-                        // Millisecond 형태의 하루(24시간)
-                        val oneDay: Long = 24 * 60 * 60 * 1000
-                        val dday = ddayCalendar.getTimeInMillis() / oneDay
-                        val today = Calendar.getInstance().getTimeInMillis() / oneDay
-                        val dday_from_today: Long = (today - dday) + 1
-
-                        start_day?.setText(String.format("❝ %d년 %d월 %d일 ❞", sYear, sMonth, sDay))
-                        d_day?.setText(String.format("D+%d", dday_from_today))
-                    }
-                }
-                val coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
-                //User에서 커플룸 이름 읽어옴
-                val roomReference = coupleRoom?.let { roomDatabase.child(it) }
-                roomReference?.addValueEventListener(postListener)
-                // User에서 커플룸 이름 불러오고, Room에 커플룸 이름으로 방을 생성 및 달력 데이터 불러옴
-            }
-        }
-        postReference.addValueEventListener(BigListener)
-        Log.d("프로필",sDay.toString())
-
-    }
 }

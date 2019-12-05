@@ -22,11 +22,9 @@ import androidx.fragment.app.Fragment
 import java.util.ArrayList
 import java.util.HashMap
 import android.content.Intent
-import android.graphics.Typeface
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
-import android.webkit.PermissionRequest
 import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -34,7 +32,6 @@ import com.bumptech.glide.Glide
 import com.example.hows_this_day.R
 import java.io.IOException
 import android.widget.Button
-import com.example.hows_this_day.fragment.AFragment.Companion.REQUEST_IMAGE
 
 
 class CFragment : Fragment() {
@@ -163,7 +160,6 @@ class CFragment : Fragment() {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
         }
     }
@@ -236,6 +232,5 @@ class CFragment : Fragment() {
         private val TAG_TEXT = "text"
         private val TAG_IMAGE = "image"
     }
-
 
 }
