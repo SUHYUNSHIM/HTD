@@ -283,7 +283,69 @@ class AFragment : Fragment() {
     }
 
     // 사귀기 시작한 날짜로부터 D+Day
+    private fun getDday() {
+        // 파이어베이스에 있는 날짜 가져오기
+        var sDay: Int? = 0
+        var sMonth: Int? = 0
+        var sYear: Int? = 0
+        val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
+        val roomDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
+        val user = FirebaseAuth.getInstance().currentUser
+        val postReference = mDatabase.child(user!!.uid)
+        val BigListener = object : ValueEventListener {
+            //User에서 데이터 불러옴
+            override fun onCancelled(p0: DatabaseError) {
+                //데이터 불러오기 실패
+            }
 
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                //데이터 변화를 감지했을 때
+                val postListener = object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
 
+                    override fun onDataChange(datasnapshot: DataSnapshot) {
+                        val Start =
+                            datasnapshot.child("StartDay").getValue(CalendarData::class.java)
+                        Start?.let {
+                            Log.d("데이데이",sDay.toString())
+                            sDay = it.Day
+                            sMonth = it.Month
+                            sYear = it.Year
+                        }
 
+                        val ddayCalendar = Calendar.getInstance()
+                        sYear?.let {
+                            sMonth?.let { it1 ->
+                                sDay?.let { it2 ->
+                                    ddayCalendar.set(
+                                        it,
+                                        it1 - 1,
+                                        it2
+                                    )
+                                }
+                            }
+                        }
+
+                        // Millisecond 형태의 하루(24시간)
+                        val oneDay: Long = 24 * 60 * 60 * 1000
+                        val dday = ddayCalendar.getTimeInMillis() / oneDay
+                        val today = Calendar.getInstance().getTimeInMillis() / oneDay
+                        val dday_from_today: Long = (today - dday) + 1
+
+                        start_day?.setText(String.format("❝ %d년 %d월 %d일 ❞", sYear, sMonth, sDay))
+                        d_day?.setText(String.format("D+%d", dday_from_today))
+                    }
+                }
+
+                val coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
+                //User에서 커플룸 이름 읽어옴
+                val roomReference = coupleRoom?.let { roomDatabase.child(it) }
+                roomReference?.addValueEventListener(postListener)
+                // User에서 커플룸 이름 불러오고, Room에 커플룸 이름으로 방을 생성 및 달력 데이터 불러옴
+            }
+        }
+        postReference.addValueEventListener(BigListener)
+        Log.d("프로필",sDay.toString())
+    }
 }
