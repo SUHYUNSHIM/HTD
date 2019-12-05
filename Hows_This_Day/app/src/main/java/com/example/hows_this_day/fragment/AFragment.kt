@@ -28,6 +28,7 @@ import com.example.hows_this_day.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -53,7 +54,7 @@ class AFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         firebaseStorage = FirebaseStorage.getInstance()
-        
+
         tvFragmentMain
         downloadInLocal()
         onProflieClick()
@@ -200,9 +201,7 @@ class AFragment : Fragment() {
 
     // 파이어베이스 스토리지에서  이미지 가져오기
     private fun downloadInLocal() {
-        val ref= firebaseStorage.reference.child("profileFolder").child("myProfile.png")
-        val localFile = File.createTempFile("profileFolder", "png")
-        ref.getFile(localFile)
+        val ref : StorageReference = FirebaseStorage.getInstance().getReference("profileFolder/myProfile.png")
 
         imgProfile = view?.findViewById(R.id.my_image)
         imgProfile?.let { Glide.with(this).load(ref).into(it) }
