@@ -95,12 +95,10 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                                 holder.bt_emptydate.setSelected(false)
                                                             } else if (heartInt == 1){
                                                                 // 여자 선택
-                                                                holder.bt_emptydate.setSelected(true)
                                                                 holder.bt_emptydate.setActivated(true)
                                                             } else if (heartInt ==2){
                                                                 Log.d("데이터 읽기 222", heartInt.toString())
                                                                 // 남자 선택
-                                                                holder.bt_emptydate.setSelected(true)
                                                                 holder.bt_emptydate.setActivated(true)
                                                             } else if (heartInt == 3){
                                                                 //풀 하트
@@ -143,11 +141,11 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                         // 공백하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
                             .setValue(2)
-                    } else if (holder.bt_emptydate.isPressed == false){
+                    } else if (holder.bt_emptydate.isActivated == false){
                       //  오른쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
                             .setValue(null)
-                    } else if (holder.bt_emptydate.isPressed == true){
+                    } else if (holder.bt_emptydate.isActivated == true){
                         //왼쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
                             .setValue(3)

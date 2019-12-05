@@ -46,7 +46,6 @@ class AFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         //뷰 설정g
         tvFragmentMain
         onProflieClick()
