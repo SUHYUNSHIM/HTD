@@ -23,11 +23,13 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 class DateCountActivity : AppCompatActivity() {
 
     lateinit var name: String
+    //사용자의 이름을 가져옴
     private var coupleRoom: String? = null
-    //나는 초대를 보냈었다.
+    //파이어베이스 커플룸 이름
     private var Invited:Boolean? = false
+    //파이어베이스 초대 보냈는지 받았는지 구분
     private var nameRoom:String? = null
-   // private var coupleName: String? = null
+   // 커플룸 이름을 받아 파이어베이스의 Room 안에 저장
     var mYear: Int = 0
     var mMonth: Int = 0
     var mDay: Int = 0
@@ -43,23 +45,29 @@ class DateCountActivity : AppCompatActivity() {
     var yDay: Int = 0
     var yMonth: Int = 0
     var yYear: Int = 0
+    //연인변수
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
+    //파이어베이스 User 레퍼런스 가져옴
     val roomDatabase:DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
+    // 파이어베이스 Room 레퍼런스 가져옴
     val user = FirebaseAuth.getInstance().currentUser
+    //파이어베이스 유저 정보 불러옴
     val uid = user!!.uid
+    //데이터베이스 키값 차별을 위해 유저의 uid 불러옴
     val postReference = mDatabase.child(uid)
+    //유저의 uid에 있는 레퍼런스 가져옴
     internal var mTxtDate1: TextView? = null
     internal var mTxtDate2: TextView? = null
     internal var mTxtDate3: TextView? = null
+    //생일 표기하기 위한 텍스트뷰
 
     val BigListener = object:ValueEventListener {
+        //User에서 데이터 불러옴
         override fun onCancelled(p0: DatabaseError) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+           //데이터 불러오기 실패
         }
-
         override fun onDataChange(datasnapshot: DataSnapshot) {
-
-
+        //데이터 변화를 감지했을 때
             val postListener = object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
 
@@ -94,10 +102,12 @@ class DateCountActivity : AppCompatActivity() {
                 }
             }
             coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
+            //User에서 커플룸 이름 읽어옴
             Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
+            //User에서 초대여부 읽어옴
             val roomReference = coupleRoom?.let{roomDatabase.child(it!!)}
             roomReference?.addValueEventListener(postListener)
-
+            // User에서 커플룸 이름 불러오고, Room에 커플룸 이름으로 방을 생성 및 달력 데이터 불러옴
         }
 
 
@@ -107,7 +117,7 @@ class DateCountActivity : AppCompatActivity() {
     //날짜 대화상자 리스너 부분
     internal var mDateSetListener1: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-
+            //데이터픽커
             //사용자가 입력한 값을 가져온뒤
             mYear = year
             mMonth = monthOfYear

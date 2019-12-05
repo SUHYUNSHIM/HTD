@@ -3,29 +3,21 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:state_selected="false"
-        android:state_pressed="false"
+
+        android:state_selected="true"
         android:drawable="@drawable/like">
-
     </item>
-
     <item
-        android:state_selected="true"
-        android:state_pressed="false"
+        android:state_activated="false"
         android:drawable="@drawable/half_filled_b">
-
+    </item>
+    <item
+        android:state_activated="true"
+        android:drawable="@drawable/half_filled_g">
     </item>
     <item
         android:state_selected="false"
-        android:state_pressed="true"
-        android:drawable="@drawable/half_filled_g">
-
-    </item>
-    <item
-        android:state_selected="true"
-        android:state_pressed="true"
         android:drawable="@drawable/redheart">
-
     </item>
 
 </selector>
