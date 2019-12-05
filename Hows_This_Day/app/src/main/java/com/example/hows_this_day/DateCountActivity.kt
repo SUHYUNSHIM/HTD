@@ -117,7 +117,6 @@ class DateCountActivity : AppCompatActivity() {
     //날짜 대화상자 리스너 부분
     internal var mDateSetListener1: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            //데이터픽커
             //사용자가 입력한 값을 가져온뒤
             mYear = year
             mMonth = monthOfYear
@@ -127,6 +126,7 @@ class DateCountActivity : AppCompatActivity() {
             UpdateNow1()
             databaseUpdate("StartDay", mYear, mMonth, mDay)
         }
+    //시작일 데이트픽커 나오게함
     internal var mDateSetListener2: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
@@ -141,7 +141,7 @@ class DateCountActivity : AppCompatActivity() {
             databaseUpdate("BirthDay", mYear, mMonth, mDay)
 
         }
-
+    //자신생일 데이트픽커 나오게함
     internal var mDateSetListener3: DatePickerDialog.OnDateSetListener =
         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
@@ -153,8 +153,8 @@ class DateCountActivity : AppCompatActivity() {
             //텍스트뷰의 값을 업데이트함
             UpdateNow3()
             databaseUpdate("YourDay", mYear, mMonth, mDay)
-
         }
+        //연인의 생일 데이트픽커 나오게함
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -238,7 +238,7 @@ class DateCountActivity : AppCompatActivity() {
 
         when (v.id) {
 
-            //하트 버튼이 눌리면 대화상자를 보여줌
+            //하트 버튼이 눌리면 데이트픽커
 
             R.id.bt_emptyheart -> {
                 //여기서 리스너도 등록함
@@ -252,7 +252,6 @@ class DateCountActivity : AppCompatActivity() {
                 } else {
                     DatePickerDialog(this, mDateSetListener1, sYear, sMonth-1, sDay).show()
                 }
-                //     bt_emptyheart.setSelected(true)
             }
 
             R.id.bt_emptyheart2 -> {
@@ -317,7 +316,7 @@ class DateCountActivity : AppCompatActivity() {
         }
     }
 
-
+    //하트에 불 들어오게 하는 함수
     fun heartSelected1() {
         if (sDay != 0) {
             val heart1 = findViewById<ImageButton>(R.id.bt_emptyheart)
@@ -327,7 +326,6 @@ class DateCountActivity : AppCompatActivity() {
 
         }
     }
-
     fun heartSelected2() {
         if (bDay != 0) {
             val heart2 = findViewById<ImageButton>(R.id.bt_emptyheart2)
@@ -347,9 +345,8 @@ class DateCountActivity : AppCompatActivity() {
 
         }
     }
-
+    //파이어베이스에 데이터 업데이트
     fun databaseUpdate(
-
         DayValue: String,
         Year: Int,
         Month: Int,
@@ -360,13 +357,14 @@ class DateCountActivity : AppCompatActivity() {
 
             }
             override fun onDataChange(datasnapshot: DataSnapshot) {
-                Log.d("OnDataChange","$nameRoom")
                 nameRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
                 val User = CalendarData(Year, Month + 1, Day)
+                //CalendarData를 이용한 자료의 구조화
                 nameRoom?.let{roomDatabase.child(it!!).child(DayValue).setValue(User)}
             }
         }
         postReference!!.addValueEventListener(roomListener)
+        // User에서 커플룸 이름 가져옴
     }
 
 

@@ -18,25 +18,15 @@ import kotlinx.android.synthetic.main.activity_invite.*
 class InviteActivity : AppCompatActivity() {
 
     lateinit var name: String
-    var RoomName:String? = null
     private var coupleRoom: String? = null
-    //나는 초대를 보냈었다.
+    //커플룸 이름
     private var Invited:Boolean? = null
+    //나는 초대를 보냈었다.
     val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User");
-    val roomDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
+    //User에서 레퍼런스를 가져옴
     val user = FirebaseAuth.getInstance().currentUser
-    val uid = user!!.uid
-    val postReference = mDatabase.child(uid)
-    val Listener = object:ValueEventListener{
-        override fun onCancelled(p0: DatabaseError) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+    //유저정보를 읽어옴
 
-        override fun onDataChange(datasnapshot: DataSnapshot) {
-            coupleRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)
-            Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,13 +64,14 @@ class InviteActivity : AppCompatActivity() {
         invite.setOnClickListener() {
             DialogInvite()
         }
-        //합기능
+        //초대를 받는 기능
         val combine = findViewById<Button>(R.id.button4)
         combine.setOnClickListener() {
             if (Invited == false) {
                 combineFun()
             }
             else {
+                //초대를 한 적이 있는 경우
                 var dialog = AlertDialog.Builder(this)
                 dialog.setTitle("이미 초대하신 기록이 있습니다.")
                     .setMessage("초대한 기록을 삭제하고 메세지를 입력하시겠습니까?")
@@ -88,8 +79,8 @@ class InviteActivity : AppCompatActivity() {
 
                 fun toast_p() {
                     mDatabase.child(user!!.uid).child("Invited").setValue(false)
+                    //초대받는 입장이라고 저장
                     combineFun()
-                    //  mDatabase.child(user!!.uid).child("CoupleRoom").setValue()
                 }
 
                 fun toast_n() {
@@ -126,9 +117,9 @@ class InviteActivity : AppCompatActivity() {
             emailIntent.type = "text/html"
             emailIntent.setPackage("com.google.android.gm")
             if (emailIntent.resolveActivity(packageManager) != null) {
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("email@gmail.com"))
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("연인의 이메일을 입력해주세요"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "$name 님께서 당신을 여기어때로 초대합니다.")
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n  $RName 를 복사해 주세요")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "비밀방의 이름이 왔습니다.\n $RName 를 복사해 주세요")
             }
             startActivity(emailIntent)
 
@@ -147,6 +138,7 @@ class InviteActivity : AppCompatActivity() {
     }
 
     fun DialogCombine() {
+        //받은 변수 입력하는 다이얼로그 생성
         var dialog = AlertDialog.Builder(this)
         dialog.setTitle("타이틀은 글쎄")
             .setMessage("받은 변수를 붙여주십시오.")
@@ -162,7 +154,6 @@ class InviteActivity : AppCompatActivity() {
                     if (otherName == "") {
                         Toast.makeText(this@InviteActivity, "변수를 입력해 주세요", Toast.LENGTH_SHORT).show()
                         DialogCombine()
-                        //   mDatabase.child(user!!.uid).child("CoupleName").setValue(null)
                     } else {
                         mDatabase.child(user!!.uid).child("CoupleRoom").setValue(otherName)
 
@@ -206,6 +197,7 @@ class InviteActivity : AppCompatActivity() {
     }
 
     fun DialogInvite() {
+        //인바이트 과정에서 다이얼로그 생성
         if (coupleRoom == null) {
             mDatabase.child(user!!.uid).child("Invited").setValue(true)
             RoomSend()
@@ -225,7 +217,7 @@ class InviteActivity : AppCompatActivity() {
             }
 
             fun toast_n() {
-                Toast.makeText(this@InviteActivity, "그러시든가", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@InviteActivity, "초대를 취소하였습니다.", Toast.LENGTH_SHORT).show()
             }
 
             var dialog_listener = object : DialogInterface.OnClickListener {
@@ -315,6 +307,7 @@ class InviteActivity : AppCompatActivity() {
     }
 
     fun combineFun(){
+        //변수 입력하는 함수
         if (coupleRoom == null) {
             DialogCombine()
         } else {
