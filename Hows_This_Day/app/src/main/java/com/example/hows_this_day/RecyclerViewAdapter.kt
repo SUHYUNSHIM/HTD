@@ -31,6 +31,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user!!.uid
+    var heartValue:Int = 0
 
 
 
@@ -86,26 +87,23 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                 if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
                                                     //흑백 제외
                                                 } else {
-                                                    val heartBoolean = daySnapshot.getValue(CoupleData::class.java)
-                                                    heartBoolean?.let{
-                                                        val MH = it.maleHeart
-                                                        val FH = it.femaleHeart
-                                                            if (MH == true && FH == true){
-                                                                //둘다 선택
-                                                                holder.bt_emptydate.setSelected(true)
-                                                                holder.bt_emptydate.setPressed(true)
-                                                            } else if (MH == false && FH == true){
+                                                    val heartInt = daySnapshot.getValue(Int::class.java)
+                                                    heartInt?.let{
+                                                        heartValue = heartInt
+                                                        Log.d("데이터 읽기", heartInt.toString())
+                                                            if (heartInt == null){
+                                                                //하트 공백
+                                                                holder.bt_emptydate.setSelected(false)
+                                                            } else if (heartInt == 1){
                                                                 // 여자 선택
-                                                                holder.bt_emptydate.setSelected(false)
-                                                                holder.bt_emptydate.setPressed(true)
-                                                            } else if (MH == true && FH == false){
+                                                                holder.bt_emptydate.setActivated(true)
+                                                            } else if (heartInt ==2){
+                                                                Log.d("데이터 읽기 222", heartInt.toString())
                                                                 // 남자 선택
+                                                                holder.bt_emptydate.setActivated(true)
+                                                            } else if (heartInt == 3){
+                                                                //풀 하트
                                                                 holder.bt_emptydate.setSelected(true)
-                                                                holder.bt_emptydate.setPressed(false)
-                                                            } else if (MH == false && FH == false){
-                                                                //선택 x
-                                                                holder.bt_emptydate.setSelected(false)
-                                                                holder.bt_emptydate.setPressed(false)
                                                             }
                                                     }
                                                 }
@@ -141,27 +139,46 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 Log.d("HeartClick", mDate.toString())
                 Log.d("HeartClick2", mMonth.toString())
                 if (Invited == true) {
+                   // 초대자의 경우
+                    Log.d("남자 클릭", mMonth.toString())
                     if (holder.bt_emptydate.isSelected == true) {
-                        if( holder.bt_emptydate.isPressed == false) {
-                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                                .setValue(null)
-                        }
-                        databaseDelete(mYear, mMonth, mDate)
-                    } else {
-                        databaseUpdate(mYear, mMonth, mDate)
+                        //풀하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                                .setValue(1)
+
+                    } else  if (holder.bt_emptydate.isSelected == false){
+                        // 공백하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(2)
+                    } else if (holder.bt_emptydate.isPressed == false){
+                      //  오른쪽하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(null)
+                    } else if (holder.bt_emptydate.isPressed == true){
+                        //왼쪽하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(3)
                     }
                 } else{
-                    if (holder.bt_emptydate.isPressed == true){
-                        if (holder.bt_emptydate.isSelected == false){
-                            mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                                .setValue(null)
+                    Log.d("여자클릭", mMonth.toString())
+                    if (holder.bt_emptydate.isSelected == true) {
+                        //풀하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(3)
 
-                        }
-                        databaseDelete(mYear,mMonth,mDate)
-                    } else{
-                        databaseUpdate(mYear, mMonth, mDate)
+                    } else  if (holder.bt_emptydate.isSelected == false){
+                        // 공백하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(2)
+                    } else if (holder.bt_emptydate.isPressed == false){
+                        //  오른쪽하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(3)
+                    } else if (holder.bt_emptydate.isPressed == true){
+                        //왼쪽하트 클릭
+                        mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
+                            .setValue(null)
                     }
-
                 }
             }
         }
@@ -198,40 +215,4 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
         notifyDataSetChanged()
         contextActivity.refreshCurrentMonth(calendar)
     }
-
-    fun databaseUpdate(
-        Year: Int,
-        Month: Int,
-        Day: Int
-    ) {
-
-        if (Invited == true) {
-            val User = CoupleData(maleHeart = true)
-            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
-                .setValue(User)
-        } else {
-            val User = CoupleData(femaleHeart = true)
-            mDatabase.child(roomName!!).child("CalendarData").child("$Year/$Month/$Day")
-                .setValue(User)
-        }
-
-    }
-
-    fun databaseDelete(
-        Year: Int,
-        Month: Int,
-        Day: Int
-    ) {
-        if (Invited == true) {
-            val User = CoupleData(maleHeart =false)
-            mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
-                .setValue(User)
-        } else{
-            val User = CoupleData(femaleHeart = false)
-            mDatabase.child("$roomName").child("CalendarData").child("$Year/$Month/$Day")
-                .setValue(User)
-        }
-    }
-
-
 }
