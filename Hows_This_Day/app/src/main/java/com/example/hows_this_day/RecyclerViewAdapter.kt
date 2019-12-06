@@ -90,20 +90,25 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                     heartInt?.let{
                                                         heartValue = heartInt
                                                         Log.d("데이터 읽기", heartInt.toString())
-                                                            if (heartInt == null){
-                                                                //하트 공백
-                                                                holder.bt_emptydate.setSelected(false)
-                                                            } else if (heartInt == 1){
-                                                                // 여자 선택
-                                                                holder.bt_emptydate.setActivated(true)
-                                                            } else if (heartInt ==2){
-                                                                Log.d("데이터 읽기 222", heartInt.toString())
-                                                                // 남자 선택
-                                                                holder.bt_emptydate.setActivated(true)
-                                                            } else if (heartInt == 3){
-                                                                //풀 하트
-                                                                holder.bt_emptydate.setSelected(true)
-                                                            }
+                                                        if (heartInt == null){
+                                                            //하트 공백
+                                                            holder.bt_emptydate.setImageResource(R.drawable.like)
+                                                            //    holder.bt_emptydate.setSelected(false)
+                                                        } else if (heartInt == 1){
+                                                            // 여자 선택
+                                                            holder.bt_emptydate.setImageResource(R.drawable.heart_filled_g)
+
+                                                            //    holder.bt_emptydate.setActivated(true)
+                                                        } else if (heartInt ==2){
+                                                            Log.d("데이터 읽기 222", heartInt.toString())
+                                                            // 남자 선택
+                                                            holder.bt_emptydate.setImageResource(R.drawable.heart_filled_b)
+                                                            // holder.bt_emptydate.setActivated(true)
+                                                        } else if (heartInt == 3){
+                                                            //풀 하트
+                                                            holder.bt_emptydate.setImageResource(R.drawable.redheart)
+                                                            //   holder.bt_emptydate.setSelected(true)
+                                                        }
                                                     }
                                                 }
                                             }
