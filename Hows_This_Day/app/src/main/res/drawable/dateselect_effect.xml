@@ -9,11 +9,11 @@
     </item>
     <item
         android:state_activated="false"
-        android:drawable="@drawable/half_filled_b">
+        android:drawable="@drawable/heart_filled_b">
     </item>
     <item
         android:state_activated="true"
-        android:drawable="@drawable/half_filled_g">
+        android:drawable="@drawable/heart_filled_g">
     </item>
     <item
         android:state_selected="true"
