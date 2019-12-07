@@ -31,7 +31,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user!!.uid
-    var heartValue:Int = 0
+    var heartValue:Int? = null
     val userReference = userDatabase.child(uid)
 
     init {
@@ -75,10 +75,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                             if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
                                 val Year = yearSnapshot.key!!.toInt()
                                 for (monthSnapshot in yearSnapshot.children) {
-                                    if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(
-                                            Calendar.MONTH
-                                        )
-                                    ) {
+                                    if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(Calendar.MONTH)) {
                                         val Month = monthSnapshot.key!!.toInt() -1
                                         for (daySnapshot in monthSnapshot.children) {
                                             if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
@@ -136,45 +133,48 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 Log.d("HeartClick2", mMonth.toString())
                 if (Invited == true) {
                    // 초대자의 경우
+                    Log.d("heartvalue",heartValue.toString())
                     Log.d("남자 클릭", mMonth.toString())
-                    if (holder.bt_emptydate.isSelected == true) {
+                    if (heartValue == 3) {
                         //풀하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
                                 .setValue(1)
 
-                    } else  if (holder.bt_emptydate.isSelected == false){
+                    } else  if (heartValue == null){
                         // 공백하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
                             .setValue(2)
-                    } else if (holder.bt_emptydate.isActivated == false){
+                    } else if (heartValue == 1){
                       //  오른쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(null)
-                    } else if (holder.bt_emptydate.isActivated == true){
+                            .setValue(3)
+                    } else if (heartValue == 2){
                         //왼쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(3)
+                            .setValue(null)
                     }
-                } else{
+                    heartValue = null
+                } else if (Invited == false){
                     Log.d("여자클릭", mMonth.toString())
-                    if (holder.bt_emptydate.isSelected == true) {
+                    if (heartValue == 3) {
                         //풀하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(3)
+                            .setValue(2)
 
-                    } else  if (holder.bt_emptydate.isSelected == false){
+                    } else  if (heartValue == null){
                         // 공백하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(2)
-                    } else if (holder.bt_emptydate.isPressed == false){
+                            .setValue(1)
+                    } else if (heartValue == 1){
                         //  오른쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(3)
-                    } else if (holder.bt_emptydate.isPressed == true){
+                            .setValue(null)
+                    } else if (heartValue == 2){
                         //왼쪽하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
-                            .setValue(null)
+                            .setValue(3)
                     }
+                    heartValue = null
                 }
             }
         }
