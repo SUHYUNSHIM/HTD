@@ -200,7 +200,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 }
             }
         }
-
+        //이번달 아닌 날짜 색 바꿈
 
         if (position % BaseCalendar.DAYS_OF_WEEK == 0) holder.tv_date.setTextColor(
             Color.parseColor(
