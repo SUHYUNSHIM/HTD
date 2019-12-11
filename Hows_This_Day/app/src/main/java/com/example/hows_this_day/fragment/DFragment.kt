@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.hows_this_day.R
-import kotlinx.android.synthetic.main.fragment_main.*
 
 class DFragment : Fragment() {
 

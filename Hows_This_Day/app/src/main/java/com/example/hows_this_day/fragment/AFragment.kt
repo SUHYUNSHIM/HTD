@@ -34,7 +34,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.fragment_a.*
-import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.IOException
 import java.util.*
 
@@ -52,7 +51,7 @@ class AFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         firebaseStorage = FirebaseStorage.getInstance()
-        
+
         onProflieClick()
         getDday()
     }
