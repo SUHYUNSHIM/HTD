@@ -7,7 +7,7 @@
         android:fromXDelta="-50%"
         android:fromYDelta="50%"
         android:toXDelta="120%"
-        android:toYDelta="-120%"
+        android:toYDelta="-120%"  
         android:fillAfter="false">
     </translate>
 
