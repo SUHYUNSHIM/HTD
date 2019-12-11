@@ -46,7 +46,6 @@ class CFragment : Fragment() {
     var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)   //날짜 선택 dialog에 나타날 이미지
     var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")                        //sample date
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialogItemList = ArrayList()
 
@@ -57,8 +56,6 @@ class CFragment : Fragment() {
             itemMap[TAG_TEXT] = text[i]
             dialogItemList?.add(itemMap)
         }
-
-
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
 
@@ -68,7 +65,6 @@ class CFragment : Fragment() {
 
         val button_run = getView()?.findViewById<View>(R.id.bt_datechooser) as Button?
         button_run?.setOnClickListener { showAlertDialog() }        //날짜 선택 다이얼로그를 호출
-
         onPictureClick()
     }
 
