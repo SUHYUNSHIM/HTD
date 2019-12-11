@@ -86,18 +86,16 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                                                     val heartInt = daySnapshot.getValue(Int::class.java)
                                                     heartInt?.let{
                                                         heartValue = heartInt
-                                                        Log.d("데이터 읽기", heartInt.toString())
                                                         if (heartInt == null){
                                                             //하트 공백
                                                             holder.bt_emptydate.setImageResource(R.drawable.like)
-                                                            //    holder.bt_emptydate.setSelected(false)
+                                                            //    holder.bt_emptydate.setSelected(false)q
                                                         } else if (heartInt == 1){
                                                             // 여자 선택
                                                             holder.bt_emptydate.setImageResource(R.drawable.heart_filled_g)
 
                                                             //    holder.bt_emptydate.setActivated(true)
                                                         } else if (heartInt ==2){
-                                                            Log.d("데이터 읽기 222", heartInt.toString())
                                                             // 남자 선택
                                                             holder.bt_emptydate.setImageResource(R.drawable.heart_filled_b)
                                                             // holder.bt_emptydate.setActivated(true)
@@ -129,12 +127,9 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                 mDate = baseCalendar.data[position]
                 mMonth = baseCalendar.calendar.get(Calendar.MONTH) + 1
                 mYear = baseCalendar.calendar.get(Calendar.YEAR)
-                Log.d("HeartClick", mDate.toString())
-                Log.d("HeartClick2", mMonth.toString())
                 if (Invited == true) {
                    // 초대자의 경우
                     Log.d("heartvalue",heartValue.toString())
-                    Log.d("남자 클릭", mMonth.toString())
                     if (heartValue == 3) {
                         //풀하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
@@ -155,7 +150,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                     }
                     heartValue = null
                 } else if (Invited == false){
-                    Log.d("여자클릭", mMonth.toString())
+                    Log.d("heartvalue",heartValue.toString())
                     if (heartValue == 3) {
                         //풀하트 클릭
                         mDatabase.child("$roomName").child("CalendarData").child("$mYear/$mMonth/$mDate")
