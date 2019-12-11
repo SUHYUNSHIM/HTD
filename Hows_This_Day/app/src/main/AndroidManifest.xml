@@ -22,7 +22,9 @@
             android:name=".TabActivity"
             android:label=".HTDActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".HTDActivity" />
+        <activity android:name=".HTDActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".DateCountActivity" />
         <activity android:name=".MainActivity">

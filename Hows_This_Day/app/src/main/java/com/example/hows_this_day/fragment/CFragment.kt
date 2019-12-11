@@ -27,6 +27,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -56,6 +57,8 @@ class CFragment : Fragment() {
             itemMap[TAG_TEXT] = text[i]
             dialogItemList?.add(itemMap)
         }
+        //키보드가 화면을 가리는 것을 막기위해서 조정해줌.
+        getActivity()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         return inflater.inflate(R.layout.fragment_c, container, false)
     }
 
@@ -144,7 +147,7 @@ class CFragment : Fragment() {
             }
         }
     }
-
+    //사진 선택 dialog
     private fun showSettingsDialog() {
         val builder = AlertDialog.Builder(mContext)
         builder.setTitle(getString(R.string.dialog_permission_title))

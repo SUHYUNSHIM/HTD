@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -7,10 +7,6 @@
     android:layout_height="fill_parent"
     android:weightSum="1"
     android:background= "#f7cac9">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
 
@@ -76,20 +72,18 @@
                     android:layout_marginBottom="20dp"
                     app:srcCompat="@drawable/camera" />
 
-                <MultiAutoCompleteTextView
+                <EditText
                     android:id="@+id/multiAutoCompleteTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#DEB887"
                     android:backgroundTintMode="src_in"
-                    android:text="일기를 쓰자"
+                    android:inputType="textImeMultiLine"
+                    android:hint ="일기를 쓰자"
+                    android:imeOptions="actionDone"
                     android:textAlignment="textStart" />
 
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
