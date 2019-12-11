@@ -52,8 +52,7 @@ class AFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         firebaseStorage = FirebaseStorage.getInstance()
-
-        tvFragmentMain
+        
         onProflieClick()
         getDday()
     }

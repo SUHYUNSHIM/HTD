@@ -16,10 +16,5 @@ class DFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        //뷰 설정
-        tvFragmentMain
-
     }
-
 }

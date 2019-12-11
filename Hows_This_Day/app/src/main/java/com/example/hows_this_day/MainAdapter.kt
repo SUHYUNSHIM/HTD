@@ -8,10 +8,9 @@ import com.example.hows_this_day.fragment.*
 
 class MainAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    private val fragmentTitleList = mutableListOf("A","B","C","D")
-
     override fun getItem(position: Int): Fragment? {
 
+        // 선택되는 포지션에 따라 해당 fragment로 이동
         return when(position) {
 
             0       ->  AFragment()
@@ -32,11 +31,9 @@ class MainAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         super.destroyItem(container, position, `object`)
-        //Log.e("FragmentPagerAdapter", "destroyItem position : $position")
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
         return null
     }
-
 }
