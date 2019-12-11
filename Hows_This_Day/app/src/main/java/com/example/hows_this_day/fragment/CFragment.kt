@@ -65,13 +65,13 @@ class CFragment : Fragment() {
 
         val button_run = getView()?.findViewById<View>(R.id.bt_datechooser) as Button?
         button_run?.setOnClickListener { showAlertDialog() }        //날짜 선택 다이얼로그를 호출
-        onPictureClick()
+        onPictureClick()            //사진 선택 함수 호출
     }
-
+    /* 사진 load 함수*/
     private fun loadPicture(url: String) {
 
         picture = getView()?.findViewById(R.id.bt_gallery)
-        picture?.let { Glide.with(this).load(url).into(it) }
+        picture?.let { Glide.with(this).load(url).into(it) }   //let 강제형변환. 형변환이 불가한 곳에서 형변환을 시도.
         picture?.setColorFilter(ContextCompat.getColor(mContext, android.R.color.transparent))
     }
 
@@ -79,18 +79,16 @@ class CFragment : Fragment() {
         val my_btn : ImageButton? = getView()?.findViewById(R.id.get_picture)
         my_btn?.setOnClickListener {
             Dexter.withActivity(getActivity())
-                .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withPermissions( Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                         if (report.areAllPermissionsGranted()) {
                             showImagePickerOptions()
                         }
-
                         if (report.isAnyPermissionPermanentlyDenied) {
                             showSettingsDialog()
                         }
                     }
-
                     override fun onPermissionRationaleShouldBeShown(
                         permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
                         token: PermissionToken?
@@ -100,39 +98,20 @@ class CFragment : Fragment() {
                 }).check()
         }
     }
-
+    
+    //ImagePickerActivity의 함수들을 재정의(사진선택)
     private fun showImagePickerOptions() {
         ImagePickerActivity.showImagePickerOptions(mContext,
-            object : ImagePickerActivity.PickerOptionListener {
+            object : ImagePickerActivity.PickerOptionListener {             
                 override fun onTakeCameraSelected() {
-                    launchCameraIntent()
+                    //launchCameraIntent()
                 }
-
                 override fun onChooseGallerySelected() {
                     launchGalleryIntent()
                 }
             })
     }
 
-    private fun launchCameraIntent() {
-        val intent = Intent(getActivity(), ImagePickerActivity::class.java)
-        intent.putExtra(
-            ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION,
-            ImagePickerActivity.REQUEST_IMAGE_CAPTURE
-        )
-
-        // setting aspect ratio
-        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
-        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
-        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
-
-        // setting maximum bitmap width and height
-        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true)
-        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 800)
-        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 800)
-
-        startActivityForResult(intent, REQUEST_IMAGE)
-    }
 
     private fun launchGalleryIntent() {
         val intent = Intent(getActivity(), ImagePickerActivity::class.java)
@@ -141,9 +120,8 @@ class CFragment : Fragment() {
             ImagePickerActivity.REQUEST_GALLERY_IMAGE
         )
 
-        // setting aspect ratio
         intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
-        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1)
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
         startActivityForResult(intent, REQUEST_IMAGE)
     }
@@ -154,10 +132,9 @@ class CFragment : Fragment() {
             if (resultCode == Activity.RESULT_OK) {
                 val uri = data?.getParcelableExtra<Uri>("path")
                 try {
-                    // You can update this bitmap to your server
+                    // 서버에 사진 업데이트 하기
                     MediaStore.Images.Media.getBitmap(getActivity()?.getContentResolver(), uri)
 
-                    // loading profile image from local cache
                     loadPicture(uri.toString())
                     // 파이어베이스 스토리지에 저장하기
                     uri?.let { firebaseStorage.reference.child("diaryFolder").child("diaryPicture.png").putFile(it) }
@@ -180,10 +157,9 @@ class CFragment : Fragment() {
             getString(android.R.string.cancel)
         ) { dialog, _ -> dialog.cancel() }
         builder.show()
-
     }
 
-    // navigating user to app settings
+    /* 앱 탐색  함수 */
     private fun openSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri = Uri.fromParts("package", getActivity()?.getPackageName(), null)
@@ -198,7 +174,7 @@ class CFragment : Fragment() {
         mContext = context
     }
 
-    //날짜 다이얼로그
+    /*날짜 다이얼로그*/
     private fun showAlertDialog() {
 
         val tvresult = getView()?.findViewById<View>(R.id.textview_main_text) as TextView?
@@ -210,7 +186,7 @@ class CFragment : Fragment() {
         val listview = view.findViewById<View>(R.id.listview_alterdialog_list) as ListView
         val dialog = builder.create()
 
-        val simpleAdapter = SimpleAdapter(
+        val simpleAdapter = SimpleAdapter(          //adapter를 사용해서 사진과 textviw를 list로 띄워준다.
             getActivity(), dialogItemList,
             R.layout.alert_dialog_row,
             arrayOf(TAG_IMAGE, TAG_TEXT),
@@ -224,14 +200,13 @@ class CFragment : Fragment() {
                 tvresult?.text = (text[position] )
                 dialog.dismiss()
             }
-
         dialog.setCancelable(false)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         dialog.show()
     }
 
     companion object {
-        private val TAG = AFragment::class.java.simpleName
+       // private val TAG = CFragment::class.java.simpleName
         val REQUEST_IMAGE = 100
         private val TAG_TEXT = "text"
         private val TAG_IMAGE = "image"
