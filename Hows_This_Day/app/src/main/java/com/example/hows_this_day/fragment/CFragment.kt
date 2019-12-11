@@ -1,4 +1,6 @@
 package com.example.hows_this_day.fragment
+//다이어리 Activity
+//사진 저장 , 불러오기
 
 import android.Manifest
 import com.example.hows_this_day.ImagePickerActivity
@@ -42,7 +44,7 @@ class CFragment : Fragment() {
 
     var dialogItemList: MutableList<Map<String, Any>>? = null                             //날짜선택 list
     var image = intArrayOf(R.drawable.redheart, R.drawable.redheart, R.drawable.redheart)   //날짜 선택 dialog에 나타날 이미지
-    var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")
+    var text = arrayOf("2019-11-21", "2019-11-22", "2019-11-23")                        //sample date
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -48,7 +48,7 @@
                 app:srcCompat="@drawable/my_profile" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/Symbolic_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"

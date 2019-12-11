@@ -39,7 +39,7 @@
                 android:text="TextView" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/bt_invite"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginTop="50dp"
@@ -47,14 +47,14 @@
                 android:textAlignment="center" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/bt_invited"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="248dp"
                 android:text="이미초대 되셨나요?"
                 android:textAlignment="center"
-                app:layout_constraintTop_toBottomOf="@id/button3" />
+                app:layout_constraintTop_toBottomOf="@id/bt_invite" />
 
         </LinearLayout>
 

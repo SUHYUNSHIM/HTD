@@ -147,19 +147,24 @@ class DateCountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datecount)
+
         //custom font
-        //font 바꾸는 부분을 구조화할 필요가 있다.ㅎㅎ
-        val tv_first_date = findViewById(R.id.tv_firstdate) as TextView?
+        val tv_first_date = findViewById(R.id.tv_firstdate) as TextView?                //Q.day1
         tv_first_date?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_regular.ttf")
-        val tv_your_birthday = findViewById(R.id.tv_yourbirthday) as TextView?
+
+        val tv_your_birthday = findViewById(R.id.tv_yourbirthday) as TextView?          //Q.my birthday
         tv_your_birthday?.typeface =Typeface.createFromAsset(getAssets(),"fonts/netmarble_regular.ttf")
-        val tv_lover_birthday = findViewById(R.id.tv_loverbithday) as TextView?
+
+        val tv_lover_birthday = findViewById(R.id.tv_loverbithday) as TextView?         //Q.lover birthday
         tv_lover_birthday?.typeface = Typeface.createFromAsset(getAssets(),"fonts/netmarble_regular.ttf")
-        val val_first_date = findViewById(R.id.val_firstdate) as TextView?
+
+        val val_first_date = findViewById(R.id.val_firstdate) as TextView?              //A.day1
         val_first_date?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
-        val val_your_birthday = findViewById(R.id.val_yourbitrhday) as TextView?
+
+        val val_your_birthday = findViewById(R.id.val_yourbitrhday) as TextView?        //A.my birthday
         val_your_birthday?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
-        val val_lover_birthday = findViewById(R.id.val_loverbithday) as TextView?
+
+        val val_lover_birthday = findViewById(R.id.val_loverbithday) as TextView?       //A.lover birthday
         val_lover_birthday?.typeface = Typeface.createFromAsset(getAssets(), "fonts/netmarble_light.ttf")
 
         //파이어베이스에 날짜정보가 있으면 하트 마크 들어온 상태
@@ -172,17 +177,19 @@ class DateCountActivity : AppCompatActivity() {
         if (yDay != 0) {
             bt_emptyheart3.setSelected(true)
         }
+
         //다음화면인 HTDActivity로 넘어가기 위한 버튼, intent
         val b = findViewById<View>(R.id.bt_tohtd) as Button
         b.setOnClickListener(View.OnClickListener {
             val HTDintent = Intent(this, TabActivity::class.java)
             startActivity(HTDintent)
         })
-        //초대기능
+
         //합기능
         mTxtDate1 = findViewById<View>(R.id.val_firstdate) as TextView
         mTxtDate2 = findViewById<View>(R.id.val_yourbitrhday) as TextView
         mTxtDate3 = findViewById<View>(R.id.val_loverbithday) as TextView
+
         //현재 날짜와 시간을 가져오기위한 Calendar 인스턴스 선언
         val cal = GregorianCalendar()
         mYear = cal.get(Calendar.YEAR)
@@ -270,6 +277,7 @@ class DateCountActivity : AppCompatActivity() {
                 heart3.setSelected(true)
             }
         }
+
     //파이어베이스에 데이터 업데이트
     fun databaseUpdate(
         DayValue: String,
