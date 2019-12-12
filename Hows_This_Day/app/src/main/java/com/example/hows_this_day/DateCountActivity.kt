@@ -288,6 +288,7 @@ class DateCountActivity : AppCompatActivity() {
     ) {
         val roomListener  = object:ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
+
             }
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 nameRoom = datasnapshot.child("CoupleRoom").getValue(String::class.java)

@@ -18,10 +18,10 @@ class BFragment : Fragment() {
 
     lateinit var scheduleRecyclerViewAdapter: RecyclerViewAdapter
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_b, container, false)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -31,23 +31,29 @@ class BFragment : Fragment() {
     }
 
     fun initView() {
-
+        //리사이클러 뷰를 이용해 프래그먼트에 달력
         scheduleRecyclerViewAdapter = RecyclerViewAdapter(this)
-
+        //아이템 뷰들이 리사이클러뷰 내부에서 배치되는 형태 지정
         rv_schedule.layoutManager = GridLayoutManager(getActivity(), BaseCalendar.DAYS_OF_WEEK)
+       //리사이클뷰 어댑터
         rv_schedule.adapter = scheduleRecyclerViewAdapter
+        //아이템 수평으로 나열
         rv_schedule.addItemDecoration(DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL))
+        //아이템 수직 나열
         rv_schedule.addItemDecoration(DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL))
 
         tv_prev_month.setOnClickListener {
+            //이전달력이동
             scheduleRecyclerViewAdapter.changeToPrevMonth()
         }
 
         tv_next_month.setOnClickListener {
+            //다음달력이동
             scheduleRecyclerViewAdapter.changeToNextMonth()
         }
     }
     fun refreshCurrentMonth(calendar: Calendar) {
+        //달력 초기화
         val sdf = SimpleDateFormat("yyyy MM", Locale.KOREAN)
         tv_current_month.text = sdf.format(calendar.time)
     }

@@ -29,6 +29,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     var Invited:Boolean?= null
     var mReference:DatabaseReference? =null
     var roomName:String? = null
+    //파이어베이스 데이터베이스 저장장소(키 값)
     private val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("Room")
     private val userDatabase: DatabaseReference = FirebaseDatabase.getInstance().getReference("User")
     private val user = FirebaseAuth.getInstance().currentUser
@@ -43,6 +44,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHelper {
+        //화면에 표시될 아이템 뷰 설정
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_datecell, parent, false)
         return ViewHolderHelper(view)
@@ -51,17 +53,19 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
 
 
     override fun getItemCount(): Int {
-        //
+        //전체 아이템 갯수 리턴
         return BaseCalendar.LOW_OF_CALENDAR * BaseCalendar.DAYS_OF_WEEK
     }
 
     override fun onBindViewHolder(holder: ViewHolderHelper, position: Int) {
+        //position에 해당하는 데이터를 뷰홀데 아이템에 표시
         val userListener = object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                //데이터 읽어오지 못함
             }
 
             override fun onDataChange(datasnapshot: DataSnapshot) {
+                //유저정보에서 초대유무, 방제를 읽어와 룸 데이터에 방의 정보를 읽어온다.
                 Invited = datasnapshot.child("Invited").getValue(Boolean::class.java)
                 roomName = datasnapshot.child("CoupleRoom").getValue(String::class.java)
                 mReference = roomName?.let { mDatabase.child(it) }
@@ -74,13 +78,10 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                         // 연/월/일 로 키값을 읽고 거기에 있는 값을 읽어온다.
                         for (yearSnapshot in dataSnapshot.child("CalendarData").children) {
                             if (yearSnapshot.key!!.toInt() == baseCalendar.calendar.get(Calendar.YEAR)) {
-                                val Year = yearSnapshot.key!!.toInt()
                                 for (monthSnapshot in yearSnapshot.children) {
                                     if (monthSnapshot.key!!.toInt() - 1 == baseCalendar.calendar.get(Calendar.MONTH)) {
-                                        val Month = monthSnapshot.key!!.toInt() -1
                                         for (daySnapshot in monthSnapshot.children) {
                                             if (daySnapshot.key!!.toInt() == baseCalendar.data[position]) {
-                                                val Day = daySnapshot.key!!.toInt()
                                                 if (position < baseCalendar.prevMonthTailOffset || position >= baseCalendar.prevMonthTailOffset + baseCalendar.currentMonthMaxDate) {
                                                     //흑백 제외
                                                 } else {
@@ -119,12 +120,15 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
                         }
                     }
                 }
+                //m레퍼런스에서 데이터를 읽어온다.
                 mReference?.addValueEventListener(Listener)
             }
         }
+        //유저 레퍼런스에서 데이터를 읽어온다.
         userReference.addValueEventListener(userListener)
-
+        //하트버튼 클릭 이벤트
         holder.bt_emptydate.setOnClickListener() {
+            // 변수에 오늘의 날짜 정보 저장
             mDate = baseCalendar.data[position]
             mMonth = baseCalendar.calendar.get(Calendar.MONTH) + 1
             mYear = baseCalendar.calendar.get(Calendar.YEAR)
@@ -216,7 +220,7 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
         }
         holder.tv_date.text = baseCalendar.data[position].toString()
     }
-
+    //월 바꾸는 함수
     fun changeToPrevMonth() {
         baseCalendar.changeToPrevMonth {
             refreshView(it)
