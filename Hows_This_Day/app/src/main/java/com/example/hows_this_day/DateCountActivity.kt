@@ -72,6 +72,7 @@ class DateCountActivity : AppCompatActivity() {
 
                 }
                 override fun onDataChange(datasnapshot: DataSnapshot) {
+                    //파이어베이스에 데이터 불러오고 변수에 값 저장
                     val Start = datasnapshot.child("StartDay").getValue(CalendarData::class.java)
                     Start?.let {
                         sDay = it.Day
