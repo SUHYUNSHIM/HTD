@@ -14,7 +14,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -26,6 +25,7 @@ import java.io.File
 
 class ImagePickerActivity : AppCompatActivity() {
 
+    // 필요한 변수 초기화
     private var lockAspectRatio = false
     private var setBitmapMaxWidthHeight = false
     private var ASPECT_RATIO_X = 16
@@ -44,7 +44,8 @@ class ImagePickerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image_picker)
 
         val intent = getIntent()
-        if (intent == null) {
+
+        if (intent == null) { // intent가 없을 때 메시지 보여주기
             Toast.makeText(
                 getApplicationContext(),
                 getString(R.string.toast_image_intent_null),
@@ -61,7 +62,11 @@ class ImagePickerActivity : AppCompatActivity() {
         bitmapMaxWidth = intent.getIntExtra(INTENT_BITMAP_MAX_WIDTH, bitmapMaxWidth)
         bitmapMaxHeight = intent.getIntExtra(INTENT_BITMAP_MAX_HEIGHT, bitmapMaxHeight)
 
-        val requestCode = intent.getIntExtra(INTENT_IMAGE_PICKER_OPTION, -1)
+        /**
+         * 여러 개의 activity를 실행하고 각 activity에서 결과를 받을 때
+         * 어떤 activity를 호출했는지 구별해주는 역할
+        **/
+        val requestCode = intent.getIntExtra(INTENT_IMAGE_PICKER_OPTION, -1) // 카메라 or 갤러리 선택 옵션
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             takeCameraImage()
         } else {
@@ -69,24 +74,30 @@ class ImagePickerActivity : AppCompatActivity() {
         }
     }
 
-    private fun takeCameraImage() {
+    private fun takeCameraImage() { // 카메라로 찍기
+        // 퍼미션 요청 런타임 과정을 심플하게 해주는 안드로이드 라이브러리
         Dexter.withActivity(this)
             .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    if (report.areAllPermissionsGranted()) {
-                        fileName = System.currentTimeMillis().toString() + ".jpg"
-                        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    if (report.areAllPermissionsGranted()) { // 모든 권한을 허용했을 때
+                        fileName = System.currentTimeMillis().toString() + ".jpg" // 파일 네임 설정
+                        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE) // 카메라 intent 만들기
                         takePictureIntent.putExtra(
                             MediaStore.EXTRA_OUTPUT,
-                            getCacheImagePath(fileName)
+                            // 미디어 데이터를 저장할 때는 MediaStore를 이용하기를 권장
+                            getCacheImagePath(fileName) // 경로 가져오기
                         )
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) { // 결과가 없으면
                             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                         }
                     }
                 }
 
+                // 사용자가 위험하다고 판단되거나 사용자가 이미 한 번 해당 권한을 거부했기 때문에
+                // 앱 사용에 대한 추가적인 설명이 필요한 경우 권한을 요청할 때 안드로이드가 사용자에게 통지하게 한다.
+                // 토큰이 사용될 때까지 요청 프로세스가 일시정지 되므로 토큰이 사용되지 않은 경우
+                // Dexter를 다시 call하거나 다른 권한을 요청할 수없으니 주의.
                 override fun onPermissionRationaleShouldBeShown(
                     permissions: List<PermissionRequest>,
                     token: PermissionToken
@@ -96,20 +107,26 @@ class ImagePickerActivity : AppCompatActivity() {
             }).check()
     }
 
-    private fun chooseImageFromGallery() {
+    private fun chooseImageFromGallery() { // 갤러리에서 선택
+        // 퍼미션 요청 런타임 과정을 심플하게 해주는 안드로이드 라이브러리
         Dexter.withActivity(this)
             .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                     if (report.areAllPermissionsGranted()) {
-                        val pickPhoto = Intent(
+                        val pickPhoto = Intent( // 이미지 intent 만들기
                             Intent.ACTION_PICK,
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                            // 미디어 데이터를 저장할 때는 MediaStore를 이용하기를 권장
                         )
-                        startActivityForResult(pickPhoto, REQUEST_GALLERY_IMAGE)
+                        startActivityForResult(pickPhoto, REQUEST_GALLERY_IMAGE) // 결과 설정
                     }
                 }
 
+                // 사용자가 위험하다고 판단되거나 사용자가 이미 한 번 해당 권한을 거부했기 때문에
+                // 앱 사용에 대한 추가적인 설명이 필요한 경우 권한을 요청할 때 안드로이드가 사용자에게 통지하게 한다.
+                // 토큰이 사용될 때까지 요청 프로세스가 일시정지 되므로 토큰이 사용되지 않은 경우
+                // Dexter를 다시 call하거나 다른 권한을 요청할 수없으니 주의.
                 override fun onPermissionRationaleShouldBeShown(
                     permissions: List<PermissionRequest>,
                     token: PermissionToken
@@ -123,17 +140,19 @@ class ImagePickerActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) {
-                cropImage(getCacheImagePath(fileName))
+            REQUEST_IMAGE_CAPTURE -> if (resultCode == RESULT_OK) { // 카메라로 찍었을 때 결과가 있다면
+                cropImage(getCacheImagePath(fileName)) // 이미지 편집으로 넘어가기
             } else {
-                setResultCancelled()
+                setResultCancelled() // 아니면 종료
             }
-            REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK) {
+            REQUEST_GALLERY_IMAGE -> if (resultCode == RESULT_OK) { // 갤러리에서 가져올 때 결과가 있다면
                 val imageUri = data?.data
-                cropImage(imageUri)
+                cropImage(imageUri) // 이미지 편집으로 넘어가기
             } else {
-                setResultCancelled()
+                setResultCancelled() // 아니면 종료
             }
+
+            // UCrop : 이미지 크롭 라이브러리
             UCrop.REQUEST_CROP -> if (resultCode == RESULT_OK) {
                 handleUCropResult(data)
             } else {
@@ -148,22 +167,17 @@ class ImagePickerActivity : AppCompatActivity() {
         }
     }
 
-    private fun cropImage(sourceUri: Uri?) {
+    private fun cropImage(sourceUri: Uri?) { // 이미지 편집
         val destinationUri =
-            Uri.fromFile(File(getCacheDir(), queryName(getContentResolver(), sourceUri)))
+            Uri.fromFile(File(getCacheDir(), queryName(getContentResolver(), sourceUri))) // 파일에서 uri 가져오기
         val options = UCrop.Options()
         options.setCompressionQuality(IMAGE_COMPRESSION)
 
-        // applying UI theme
-        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary))
-
         if (lockAspectRatio)
-            options.withAspectRatio(ASPECT_RATIO_X.toFloat(), ASPECT_RATIO_Y.toFloat())
+            options.withAspectRatio(ASPECT_RATIO_X.toFloat(), ASPECT_RATIO_Y.toFloat()) // 가로 세로 비율 설정
 
         if (setBitmapMaxWidthHeight)
-            options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight)
+            options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight) // 최대 넓이 높이 설정
 
         UCrop.of(sourceUri!!, destinationUri)
             .withOptions(options)
@@ -171,7 +185,7 @@ class ImagePickerActivity : AppCompatActivity() {
     }
 
     private fun handleUCropResult(data: Intent?) {
-        if (data == null) {
+        if (data == null) { // 데이터가 없으면 종료
             setResultCancelled()
             return
         }
@@ -186,20 +200,22 @@ class ImagePickerActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun setResultCancelled() {
+    private fun setResultCancelled() { // 종료
         val intent = Intent()
         setResult(Activity.RESULT_CANCELED, intent)
         finish()
     }
 
-    private fun getCacheImagePath(fileName: String): Uri {
+    private fun getCacheImagePath(fileName: String): Uri { // 경로 가져오기
         val path = File(getExternalCacheDir(), "camera")
         if (!path.exists()) path.mkdirs()
         val image = File(path, fileName)
         return getUriForFile(this@ImagePickerActivity, getPackageName() + ".provider", image)
     }
 
+    // static 접근을 허용할 프로퍼티
     companion object {
+
         private val TAG = ImagePickerActivity::class.java.simpleName
         val INTENT_IMAGE_PICKER_OPTION = "image_picker_option"
         val INTENT_ASPECT_RATIO_X = "aspect_ratio_x"
@@ -210,17 +226,16 @@ class ImagePickerActivity : AppCompatActivity() {
         val INTENT_BITMAP_MAX_WIDTH = "max_width"
         val INTENT_BITMAP_MAX_HEIGHT = "max_height"
 
-
         val REQUEST_IMAGE_CAPTURE = 0
         val REQUEST_GALLERY_IMAGE = 1
         lateinit var fileName: String
 
-        fun showImagePickerOptions(context: Context, listener: PickerOptionListener) {
-            // setup the alert builder
+        fun showImagePickerOptions(context: Context, listener: PickerOptionListener) { // 선택 옵션 만들기
+
             val builder = AlertDialog.Builder(context)
             builder.setTitle(context.getString(R.string.lbl_set_profile_photo))
 
-            // add a list
+            // 리스트 추가
             val animals = arrayOf(
                 context.getString(R.string.lbl_take_camera_picture),
                 context.getString(R.string.lbl_choose_from_gallery)
@@ -232,11 +247,16 @@ class ImagePickerActivity : AppCompatActivity() {
                 }
             }
 
-            // create and show the alert dialog
+            // 다이얼러그 만들고 보여주기
             val dialog= builder.create()
             dialog.show()
         }
 
+        /**
+         * 린트는 개발자가 완벽히 알맞은 코드나 충돌 가능성이 있는 코드를 사용할때 @SuppressLint(...)를 붙여 사용할 수 있게 해준다
+         * @SuppressLint("NewApi")는 해당 프로젝트의 설정 된 minSdkVersion 이후에 나온 API를 사용할때
+         * warning을 없애고 개발자가 해당 APi를 사용할 수 있게 한다
+         */
         @SuppressLint("Recycle")
         private fun queryName(resolver: ContentResolver, uri: Uri?): String {
             val returnCursor = resolver.query(uri!!, null, null, null, null)!!
@@ -247,17 +267,5 @@ class ImagePickerActivity : AppCompatActivity() {
             return name
         }
 
-        /**
-         * Calling this will delete the images from cache directory
-         * useful to clear some memory
-         */
-        fun clearCache(context: Context) {
-            val path = File(context.externalCacheDir, "camera")
-            if (path.exists() && path.isDirectory) {
-                for (child in path.listFiles()!!) {
-                    child.delete()
-                }
-            }
-        }
     }
 }

@@ -139,9 +139,9 @@ class AFragment : Fragment() {
             ImagePickerActivity.REQUEST_GALLERY_IMAGE
         )
 
-        // 가로 세로 비율 설정
+        // 가로 세로 비율 설정(16x9)
         intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
-        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1)
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
 
         // 갤러리는 이미 찍어놓은 사진들이기 때문에 최대 너비 및 높이 설정 필요 없음
