@@ -1,5 +1,5 @@
 package com.example.hows_this_day
-
+//출처:https://woochan-dev.tistory.com/27
 import android.graphics.Color
 
 import android.util.Log

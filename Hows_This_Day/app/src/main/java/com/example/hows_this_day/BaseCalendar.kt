@@ -1,7 +1,10 @@
 package com.example.hows_this_day
 
 import java.util.*
-
+/*리사이클뷰 날짜정보를 계산할 떄 쓰이는 클래스
+  아이템뷰에서 날짜숫자 계산을 이 클래스가 해줌
+  출처:https://woochan-dev.tistory.com/27
+ */
 
 class BaseCalendar {
 

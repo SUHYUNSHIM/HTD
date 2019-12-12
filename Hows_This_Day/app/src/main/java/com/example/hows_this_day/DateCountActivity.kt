@@ -208,34 +208,40 @@ class DateCountActivity : AppCompatActivity() {
             R.id.bt_emptyheart -> {
                 //여기서 리스너도 등록함
                 if (sDay == 0) {
+                    //날짜정보가 없으면 데이트픽커에 오늘날짜 띄움
                     val cal = GregorianCalendar()
                     mYear = cal.get(Calendar.YEAR)
                     mMonth = cal.get(Calendar.MONTH)
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener1, mYear, mMonth, mDay).show()
                 } else {
+                    //데이터 있으면 데이터 날짜 띄움
                     DatePickerDialog(this, mDateSetListener1, sYear, sMonth-1, sDay).show()
                 }
             }
             R.id.bt_emptyheart2 -> {
                 if (bDay == 0) {
+                    //날짜정보가 없으면 데이트픽커에 오늘날짜 띄움
                     val cal = GregorianCalendar()
                     mYear = cal.get(Calendar.YEAR)
                     mMonth = cal.get(Calendar.MONTH)
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener2, mYear, mMonth, mDay).show()
                 } else {
+                    //데이터 있으면 데이터 날짜 띄움
                     DatePickerDialog(this, mDateSetListener2, bYear, bMonth -1, bDay).show()
                 }
             }
             R.id.bt_emptyheart3 -> {
                 if (yDay == 0) {
+                    //날짜정보가 없으면 데이트픽커에 오늘날짜 띄움
                     val cal = GregorianCalendar()
                     mYear = cal.get(Calendar.YEAR)
                     mMonth = cal.get(Calendar.MONTH)
                     mDay = cal.get(Calendar.DAY_OF_MONTH)
                     DatePickerDialog(this, mDateSetListener3, mYear, mMonth, mDay).show()
                 } else {
+                    //데이터 있으면 데이터 날짜 띄움
                     DatePickerDialog(this, mDateSetListener3, yYear, yMonth -1, yDay).show()
                 }
             }
