@@ -33,10 +33,13 @@ class BFragment : Fragment() {
     fun initView() {
         //리사이클러 뷰를 이용해 프래그먼트에 달력
         scheduleRecyclerViewAdapter = RecyclerViewAdapter(this)
-
+        //아이템 뷰들이 리사이클러뷰 내부에서 배치되는 형태 지정
         rv_schedule.layoutManager = GridLayoutManager(getActivity(), BaseCalendar.DAYS_OF_WEEK)
+       //리사이클뷰 어댑터
         rv_schedule.adapter = scheduleRecyclerViewAdapter
+        //아이템 수평으로 나열
         rv_schedule.addItemDecoration(DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL))
+        //아이템 수직 나열
         rv_schedule.addItemDecoration(DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL))
 
         tv_prev_month.setOnClickListener {

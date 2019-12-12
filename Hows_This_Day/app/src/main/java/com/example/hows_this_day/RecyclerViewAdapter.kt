@@ -53,11 +53,12 @@ class RecyclerViewAdapter(val contextActivity: BFragment) : RecyclerView.Adapter
 
 
     override fun getItemCount(): Int {
-        //
+        //전체 아이템 갯수 리턴
         return BaseCalendar.LOW_OF_CALENDAR * BaseCalendar.DAYS_OF_WEEK
     }
 
     override fun onBindViewHolder(holder: ViewHolderHelper, position: Int) {
+        //position에 해당하는 데이터를 뷰홀데 아이템에 표시
         val userListener = object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                //데이터 읽어오지 못함
